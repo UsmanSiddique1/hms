@@ -24,7 +24,7 @@ use App\Http\Controllers\ProcedureController;
 //     return view('welcome');
 // });
 
-Route::get('/admin', [AdminController::class, 'dashboard']);
+Route::get('/', [AdminController::class, 'dashboard']);
 Route::resource('/doctors', DoctorController::class);
 Route::resource('/patients', PatientController::class);
 Route::resource('/departments', DepartmentController::class);
