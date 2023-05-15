@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\http\controllers\AdminController;
-use App\http\controllers\DoctorController;
-use App\http\controllers\PatientController;
-use App\http\controllers\SlipController;
-use App\http\controllers\BedController;
-use App\http\controllers\DepartmentController;
-use App\http\controllers\ProcedureController;
+use App\http\Controllers\AdminController;
+use App\http\Controllers\DoctorController;
+use App\http\Controllers\PatientController;
+use App\http\Controllers\SlipController;
+use App\http\Controllers\BedController;
+use App\http\Controllers\DepartmentController;
+use App\http\Controllers\ProcedureController;
 
 /*
 |--------------------------------------------------------------------------
