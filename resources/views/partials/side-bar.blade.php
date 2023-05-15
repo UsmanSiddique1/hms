@@ -41,7 +41,7 @@
             <div class="tab-pane active" id="menu">
                 <nav id="left-sidebar-nav" class="sidebar-nav">
                     <ul class="metismenu li_animation_delay">
-                        <li class=""><a href="{{ url('admin') }}" class=""><i class="fa fa-dashboard"></i><span>Dashboard</span></a>                           
+                        <li class=""><a href="{{ url('/') }}" class=""><i class="fa fa-dashboard"></i><span>Dashboard</span></a>                           
                         
                         </li>
                         <li><a href="{{ url('slips/create') }}" class=""><i class="fa fa-users"></i><span>Create Slip</span></a></li> 
