@@ -13,24 +13,35 @@
             <div class="col-md-12">
                 <div class="bg-light p-5 rounded-lg m-3">
                     <h1 class="display-4 text-center">Ejaz Sikandar Memorial Hospital</h1>
-                    <p class="lead"> Slip Type <span class="badge badge-primary">{{ $slip->type }}</span></p>
-                    <p class="lead"> Price: <b>Rs.{{ $slip->total_amount }}</b></p>
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="lead"> Slip Type <span class="badge badge-primary">{{ $slip->type }}</span></p>
+                            <p class="lead"> Price: <b>Rs.{{ $slip->total_amount }}</b></p>                            
+                        </div>
+                        <div>
+                            <p class="lead"> Dated: <b>{{ $slip->created_at->format('d-M-Y') }}</b></p>
+                            <p class="lead"> Time: <b>{{ $slip->created_at->format('h:i A') }}</b></p>
+                        </div>
+                        
+                    </div>
+                    
                     <hr class="my-4">
                     <div class="row">
                         <div class="col-md-6">
                             <h4>Patient Details</h3>
-                            <p>Name: {{ $slip->patient->name }}</p>
-                            <p>phone: {{ $slip->patient->phone }}</p>
-                            <p>age: {{ $slip->patient->age }}</p>
-                            <p>gender: {{ $slip->patient->gender }}</p>
+                            <p><strong>Name: </strong>{{ $slip->patient->name }}</p>
+                            <p><strong>phone:</strong>  {{ $slip->patient->phone }}</p>
+                            <p><strong>age:</strong>  {{ $slip->patient->age }}</p>
+                            <p><strong>gender:</strong>  {{ $slip->patient->gender }}</p>
                             <h5>MR Number: {{ $slip->patient->mr_number }}</h5>
-
                             
                         </div>
                         <div class="col-md-6">
                             <h4>Doctor Details</h3>
-                            <p>Name: {{ $slip->doctor ? $slip->doctor->user['f_name'] : 'null' }}</p>
-                            <p>speciality: {{ $slip->doctor ? $slip->speciality : 'null' }}</p>
+                            <p><strong>Name:</strong>  {{ $slip->doctor ? $slip->doctor->user['f_name'] : 'null' }}</p>
+                            <p><strong>speciality:</strong>  {{ $slip->doctor ? $slip->speciality : 'null' }}</p>
                         </div>
                     </div>
                   </div>
