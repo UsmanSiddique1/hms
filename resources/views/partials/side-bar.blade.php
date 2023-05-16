@@ -5,7 +5,7 @@
             <img src="../assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
             <div class="dropdown">
                 <span>Welcome,</span>
-                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>Dr. Chandler Bing</strong></a>
+                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>ESMH Admin</strong></a>
                 <ul class="dropdown-menu dropdown-menu-right account">
                     <li><a href="doctor-profile.html"><i class="icon-user"></i>My Profile</a></li>                    
                     <li class="divider"></li>

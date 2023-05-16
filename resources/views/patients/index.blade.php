@@ -15,11 +15,11 @@
                 <div class="d-flex flex-row-reverse">
                     <div class="page_action">
                         <!-- Nav tabs -->
-                        <ul class="nav nav-tabs-new">
+                        {{-- <ul class="nav nav-tabs-new">
                             <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#All">All</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#USA">USA</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#India">India</a></li>
-                        </ul>
+                        </ul> --}}
                     </div>
                     <div class="p-2 d-flex">
                         
@@ -34,7 +34,7 @@
             <div class="card patients-list">
                 <div class="header">
                     <h2>Patients List</h2>
-                    <ul class="header-dropdown">
+                    {{-- <ul class="header-dropdown">
                         <li><a class="tab_btn" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Weekly">W</a></li>
                         <li><a class="tab_btn" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Monthly">M</a></li>
                         <li><a class="tab_btn active" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Yearly">Y</a></li>
@@ -46,7 +46,7 @@
                                 <li><a href="javascript:void(0);">Something else</a></li>
                             </ul>
                         </li>
-                    </ul>
+                    </ul> --}}
                 </div>
                 <div class="body">
                     <div class="input-group">
@@ -62,26 +62,22 @@
                                 <thead>
                                     <tr>                                       
                                         <th>Media</th>
-                                        <th>ID</th>
+                                        <th>MR Number</th>
                                         <th>Name</th>
                                         <th>Age</th>
-                                        <th>Address</th>
                                         <th>Number</th>
-                                        <th>Last Visit</th>
-                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($patients as $patient)
                                     <tr>
                                         <td><span class="list-icon"><img class="avatar" src="../assets/images/xs/avatar1.jpg" alt=""></span></td>
-                                        <td><span class="list-name">KU 00598</span></td>
-                                        <td>Daniel</td>
-                                        <td>32</td>
-                                        <td>71 Pilgrim Avenue Chevy Chase, MD 20815</td>
-                                        <td>404-447-6013</td>
-                                        <td>11 Jan 2018</td>
-                                        <td><span class="badge badge-success">Approved</span></td>
+                                        <td><span class="list-name">{{ $patient->mr_number }}</span></td>
+                                        <td>{{ $patient->name }}</td>
+                                        <td>{{ $patient->age }}</td>
+                                        <td>{{ $patient->phone }}</td>
                                     </tr>
+                                    @endforeach
                                     
                                 </tbody>
                             </table>                            
