@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\User;
+use App\Models\Department;
 
 class DoctorController extends Controller
 {
@@ -26,7 +27,8 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create');
+        $departments = Department::all();
+        return view('doctors.create', compact('departments'));
     }
 
     /**

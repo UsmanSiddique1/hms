@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('patient_id')->unsigned();
             $table->bigInteger('doctor_id')->unsigned()->nullable();
             $table->bigInteger('department_id')->unsigned()->nullable();
+            $table->bigInteger('bed_id')->unsigned()->nullable();
             $table->string('type');
             $table->bigInteger('total_amount');
             $table->bigInteger('remaining_amount');
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->foreign('bed_id')->references('id')->on('beds')->onDelete('cascade');
 
         });
     }

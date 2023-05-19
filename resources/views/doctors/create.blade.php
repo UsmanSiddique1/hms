@@ -65,8 +65,9 @@
                                 <div class="form-group">
                                     <select name="department" class="form-control show-tick">
                                         <option value="">- Department -</option>
-                                        <option value="1">Surgery</option>
-                                        <option value="2">Operation</option>
+                                        @foreach($departments as $department)
+                                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

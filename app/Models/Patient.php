@@ -13,7 +13,9 @@ class Patient extends Model
         'mr_number',
         'name',
         'phone',
-        'age',
+        'age_years',
+        'age_months',
+        'age_weeks',
         'gender',
         'image'
     ];

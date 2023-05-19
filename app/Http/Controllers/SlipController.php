@@ -10,6 +10,10 @@ use App\Models\Procedure;
 use App\Models\Department;
 use App\Models\Bed;
 use App\Models\Slip;
+use App\Models\SlipProcedure;
+
+use Illuminate\Support\Facades\DB;
+
 
 class SlipController extends Controller
 {
@@ -50,51 +54,87 @@ class SlipController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-        $request->validate([
-            'mr_number' => 'required',
-            'type' => 'required'
-        ]);
+        try {
 
-        if (!empty($request->image)) {
-            $file =$request->file('image');
-            $extension = $file->getClientOriginalExtension(); 
-            $filename = time().'.' . $extension;
-            $file->move(public_path('uploads/patients'), $filename);
-            $imageUrl = 'public/uploads/patients'.$filename;
-        }
-        else{
-            $imageUrl = '';
-        }
+            DB::beginTransaction();
 
-        $patient = Patient::firstOrCreate(['mr_number'=> $request->mr_number],
-        [
-            'mr_number' => $request->mr_number,            
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'age' => $request->age,
-            'gender' => $request->gender,
-            'image' => $imageUrl,
-        ]);
+            $request->validate([
+                'mr_number' => 'required',
+                'type' => 'required'
+            ]);
+    
+            if (!empty($request->image)) {
+                $file =$request->file('image');
+                $extension = $file->getClientOriginalExtension(); 
+                $filename = time().'.' . $extension;
+                $file->move(public_path('uploads/patients'), $filename);
+                $imageUrl = 'public/uploads/patients'.$filename;
+            }
+            else{
+                $imageUrl = '';
+            }
+            
 
-        $slip = Slip::create([
-            'patient_id' => $patient->id,
-            'department_id' => $request->department,
-            'receptionist_id' => 1,
-            'bed_id' => $request->bed,
-            'doctor_id' => $request->doctor,
-            'type' => $request->type,
-            'total_amount' => $request->total_amount,
-            'remaining_amount' => 0
+            $patient = Patient::where('mr_number', $request->mr_number)->first();
+            
+            if(!$patient)
+            {
+                $patient = Patient::create([
+                    'mr_number' => $request->mr_number,            
+                    'name' => $request->name,
+                    'phone' => $request->phone,
+                    'age_years' => $request->age_years,
+                    'age_months' => $request->age_months,
+                    'age_weeks' => $request->age_weeks,
+                    'gender' => $request->gender,
+                    'image' => $imageUrl,
+                ]);
+            }            
+    
+            $slip = Slip::create([
+                'patient_id' => $patient->id,
+                'department_id' => $request->department,
+                'receptionist_id' => 1,
+                'bed_id' => $request->bed,
+                'doctor_id' => $request->doctor,
+                'type' => $request->type,
+                'total_amount' => $request->total_amount,
+                'remaining_amount' => 0    
+            ]);
 
-        ]);
+            if(count($request->procedure) > 0)
+            {
+                foreach($request->procedure as $item => $v)
+                {
+                    $procedure = Procedure::find($request->procedure[$item]);
+                    SlipProcedure::create([
+                        'slip_id' => $slip->id,
+                        'procedure_id' => $procedure->id,
+                        'price' => $procedure->price
+                    ]);
+                }
+            }
+    
+            $ref_count = ReferenceCount::where('type', 'mr')->first();
+            $ref_count->count = $ref_count->count + 1;
+            $ref_count->update();
 
-        $ref_count = ReferenceCount::where('type', 'mr')->first();
-        $ref_count->count = $ref_count->count + 1;
-        $ref_count->update();
+            DB::commit();
 
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            return back()->with('error', $e->getFile(). "Line:" . $e->getLine().  $e->getMessage());
+            
+        }      
 
         return redirect('/slip/'.$slip->id);
+
+        
+
+
 
     }
 

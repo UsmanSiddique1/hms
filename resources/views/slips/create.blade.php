@@ -34,20 +34,25 @@
                 <form action="{{ route('slips.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="body">
+                        @if(Session::has('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ Session::get('error') }}
+                          </div>
+                          @endif
                         <div class="row clearfix">
                             <div class="col-sm-4" id="type_div">
                                 <div class="form-group">
-                                    <select name="type" class="form-control show-tick" id="type">
+                                    <select name="type" class="form-control show-tick" id="type" required>
                                         <option value="">Type</option>
-                                        <option value="emergency">Emergency</option>
-                                        <option value="ipd">IPD</option>
-                                        <option value="opd">OPD</option>
+                                        <option value="Emergency">Emergency</option>
+                                        <option value="IPD">IPD</option>
+                                        <option value="OPD">OPD</option>
                                     </select>
                                 </div>
                             </div> 
                             <div class="col-sm-4" id="select_patient_div">
                                 <div class="form-group">
-                                    <select class="form-control show-tick" id="select_patient">
+                                    <select class="form-control show-tick" id="select_patient" required>
                                         <option value="">Select Patient</option>
                                         <option value="existing">Existing</option>
                                         <option value="new">New</option>
@@ -56,20 +61,36 @@
                             </div>  
                             <div class="col-sm-4" id="mr_number_div">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="mr_number" data-new_mr="{{ $new_mr }}" id="mr_number" placeholder="MR#">
+                                    <input type="text" class="form-control" name="mr_number" data-new_mr="{{ $new_mr }}" id="mr_number" placeholder="MR#" required>
                                 </div>
                             </div>
                             <div class="col-sm-4 patient_details" id="name_div">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="patient_name" name="name" placeholder="Patient Name">
+                                    <input type="text" class="form-control" id="patient_name" name="name" placeholder="Patient Name" required>
                                 </div>
                             </div>
-                            <div class="col-sm-4 patient_details" id="age_div">
-                                <div class="form-group">
-                                    <input type="number" class="form-control" id="patient_name" name="age" placeholder="Patient Age">
+                            <div class="col-sm-6 patient_details" id="age_div">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" id="patient_name" name="age_years" placeholder="Years">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" id="patient_name" name="age_months" placeholder="Months">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" id="patient_name" name="age_weeks" placeholder="Weeks">
+                                        </div>
+                                    </div>
                                 </div>
+                                
+                                
                             </div> 
-                            <div class="col-sm-3" id="gender_div">
+                            <div class="col-sm-2" id="gender_div">
                                 <div class="form-group">
                                     <select class="form-control show-tick" name="gender">
                                         <option value="">- Gender -</option>
@@ -81,7 +102,7 @@
                             
                             <div class="col-sm-3" id="phone_div">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="phone" placeholder="Phone">
+                                    <input type="text" class="form-control" name="phone" placeholder="Phone" required>
                                 </div>
                             </div>
                             
@@ -95,7 +116,7 @@
                                     <select name="doctor" class="form-control show-tick" id="doctor">
                                         <option value="">Doctor</option>
                                         @foreach($doctors as $doctor)
-                                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                            <option value="{{ $doctor->id }}">{{ $doctor->user->full_name }} - ({{ $doctor->speciality }})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -130,7 +151,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input readonly class="form-control" name="total_amount" id="total_amount" placeholder="Total">
+                                    <input class="form-control" name="total_amount" id="total_amount" placeholder="Total" required>
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -154,19 +175,19 @@ $('#doctor_div, #procedure_div, #bed_div, #gender_div, #image_div, #age_div').ad
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
-    if(type == 'emergency')
+    if(type == 'Emergency')
     {
         $('#total_amount').val(300);
         $('#doctor_div, #procedure_div, #bed_div').addClass('d-none');
     }
-    if(type == 'opd')
+    if(type == 'OPD')
     {
         $('#total_amount').val(0);
         $('#doctor_div, #procedure_div').removeClass('d-none');
         $('#bed_div').addClass('d-none');
 
     }
-    if(type == 'ipd')
+    if(type == 'IPD')
     {
         $('#total_amount').val(0);
         $('#doctor_div, #procedure_div, #bed_div').removeClass('d-none');
@@ -189,6 +210,10 @@ $('#select_patient').change(function(){
         $('#mr_number').val(new_mr);
     }
 });
+
+// $('#procedure').change(function(){
+//     console.log($(this).val());
+// })
 </script>
 @endpush
 @endsection

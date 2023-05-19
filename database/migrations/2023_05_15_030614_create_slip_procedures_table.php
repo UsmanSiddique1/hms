@@ -19,6 +19,10 @@ return new class extends Migration
             $table->bigInteger('procedure_id')->unsigned();
             $table->bigInteger('price')->unsigned();
             $table->timestamps();
+
+            $table->foreign('slip_id')->references('id')->on('slips')->onDelete('cascade');
+            $table->foreign('procedure_id')->references('id')->on('procedures')->onDelete('cascade');
+
         });
     }
 

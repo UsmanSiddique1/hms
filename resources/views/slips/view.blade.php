@@ -18,6 +18,17 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="lead"> Slip Type <span class="badge badge-primary">{{ $slip->type }}</span></p>
+                            @if($slip->type == 'IPD')
+                                <p><strong>Room Number: </strong>{{ $slip->bed->number }}</p>                                
+                            @endif
+                            @if($slip->type == 'IPD' || $slip->type == 'OPD')
+                                <p><strong>Procedures </strong>
+                                    @foreach($slip->procedures as $item)
+                                    {{ $item->procedure->name }},
+                                    @endforeach
+                                </p>
+                            @endif
+                            
                             <p class="lead"> Price: <b>Rs.{{ $slip->total_amount }}</b></p>                            
                         </div>
                         <div>
@@ -33,15 +44,15 @@
                             <h4>Patient Details</h3>
                             <p><strong>Name: </strong>{{ $slip->patient->name }}</p>
                             <p><strong>phone:</strong>  {{ $slip->patient->phone }}</p>
-                            <p><strong>age:</strong>  {{ $slip->patient->age }}</p>
+                            <p><strong>age:</strong>  {{ $slip->patient->age_years }}y, {{ $slip->patient->age_months }}m, {{ $slip->patient->age_weeks }}w</p>
                             <p><strong>gender:</strong>  {{ $slip->patient->gender }}</p>
                             <h5>MR Number: {{ $slip->patient->mr_number }}</h5>
                             
                         </div>
                         <div class="col-md-6">
                             <h4>Doctor Details</h3>
-                            <p><strong>Name:</strong>  {{ $slip->doctor ? $slip->doctor->user['f_name'] : 'null' }}</p>
-                            <p><strong>speciality:</strong>  {{ $slip->doctor ? $slip->speciality : 'null' }}</p>
+                            <p><strong>Name:</strong>  {{ $slip->doctor ? $slip->doctor->user['full_name'] : 'null' }}</p>
+                            <p><strong>speciality:</strong>  {{ $slip->doctor ? $slip->doctor->speciality : 'null' }}</p>
                         </div>
                     </div>
                   </div>

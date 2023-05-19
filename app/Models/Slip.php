@@ -13,6 +13,7 @@ class Slip extends Model
         'patient_id',
         'department_id',
         'doctor_id',
+        'bed_id',
         'type',
         'total_amount',
         'remaining_amount',
@@ -36,7 +37,12 @@ class Slip extends Model
 
     public function department()
     {
-        return $this->belongsTo(department::class);
+        return $this->belongsTo(Department::class);
+    }
+
+    public function procedures()
+    {
+        return $this->hasMany(SlipProcedure::class);
     }
 
 }

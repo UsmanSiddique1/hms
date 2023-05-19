@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Doctor::class);
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->f_name. ' ' . $this->l_name;
+    }
 }

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('mr_number')->unique();
             $table->string('name');
             $table->string('gender')->nullable();
-            $table->integer('age')->nullable();
+            $table->integer('age_years')->nullable();
+            $table->integer('age_months')->nullable();
+            $table->integer('age_weeks')->nullable();
             $table->bigInteger('phone');
             $table->string('image')->nullable();
             $table->timestamps();
