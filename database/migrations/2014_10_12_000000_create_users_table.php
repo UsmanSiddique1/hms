@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('dob')->nullable();
             $table->string('gender')->nullable();
             $table->string('image')->nullable();
-            $table->bigInteger('role_id')->unsigned();
+            $table->integer('role_id')->unsigned();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
