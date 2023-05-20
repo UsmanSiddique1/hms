@@ -48,6 +48,8 @@ class DoctorController extends Controller
             'speciality' => 'required',
         ]);
 
+        $imageUrl = 'dummy-image.jpg';
+        
         if (!empty($request->image)) {
             $file =$request->file('image');
             $extension = $file->getClientOriginalExtension(); 

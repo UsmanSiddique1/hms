@@ -136,7 +136,7 @@
                                     <select name="bed" class="form-control show-tick" id="bed">
                                         <option value="">Select Bed</option>
                                         @foreach($beds as $bed)
-                                            <option value="{{ $bed->id }}">{{ $bed->number }} (Rs.{{ $procedure->price }})</option>
+                                            <option value="{{ $bed->id }}">{{ $bed->number }} (Rs.{{ $bed->price }})</option>
                                         @endforeach
                                     </select>
                                 </div>

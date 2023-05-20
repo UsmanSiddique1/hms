@@ -53,7 +53,7 @@ class SlipController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {                
         try {
 
             DB::beginTransaction();
@@ -62,7 +62,9 @@ class SlipController extends Controller
                 'mr_number' => 'required',
                 'type' => 'required'
             ]);
-    
+            
+            $imageUrl = 'dummy-image.jpg';
+
             if (!empty($request->image)) {
                 $file =$request->file('image');
                 $extension = $file->getClientOriginalExtension(); 
@@ -70,10 +72,6 @@ class SlipController extends Controller
                 $file->move(public_path('uploads/patients'), $filename);
                 $imageUrl = 'public/uploads/patients'.$filename;
             }
-            else{
-                $imageUrl = '';
-            }
-            
 
             $patient = Patient::where('mr_number', $request->mr_number)->first();
             
@@ -102,7 +100,7 @@ class SlipController extends Controller
                 'remaining_amount' => 0    
             ]);
 
-            if(count($request->procedure) > 0)
+            if(isset($request->procedure) && count($request->procedure) > 0)
             {
                 foreach($request->procedure as $item => $v)
                 {
