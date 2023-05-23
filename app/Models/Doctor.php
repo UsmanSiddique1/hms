@@ -12,7 +12,8 @@ class Doctor extends Model
     protected $fillable = [
         'user_id',
         'speciality',
-        'department_id'
+        'department_id',
+        'price'
         // 'days',
         // 'from',
         // 'to'

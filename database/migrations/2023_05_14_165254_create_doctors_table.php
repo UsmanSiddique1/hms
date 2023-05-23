@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('days')->nullable();
             $table->string('from')->nullable();
             $table->string('to')->nullable();
+            $table->bigInteger('price')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

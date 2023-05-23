@@ -106,11 +106,11 @@
                                 </div>
                             </div>
                             
-                            <div class="col-sm-6" id="image_div">
+                            {{-- <div class="col-sm-6" id="image_div">
                                 <div class="form-group">
                                     <input type="file" name="image" class="dropify">
                                 </div>
-                            </div> 
+                            </div>  --}}
                             <div class="col-sm-4" id="doctor_div">
                                 <div class="form-group">
                                     <select name="doctor" class="form-control show-tick" id="doctor">
@@ -177,20 +177,21 @@ $('#type').change(function(){
     var type = $(this).val();
     if(type == 'Emergency')
     {
-        $('#total_amount').val(300);
-        $('#doctor_div, #procedure_div, #bed_div').addClass('d-none');
+        $(' #procedure_div').removeClass('d-none');
+
+        $('#doctor_div, #bed_div').addClass('d-none');
     }
     if(type == 'OPD')
     {
         $('#total_amount').val(0);
-        $('#doctor_div, #procedure_div').removeClass('d-none');
+        $('#doctor_div').removeClass('d-none');
         $('#bed_div').addClass('d-none');
 
     }
     if(type == 'IPD')
     {
         $('#total_amount').val(0);
-        $('#doctor_div, #procedure_div, #bed_div').removeClass('d-none');
+        $('#doctor_div, #bed_div').removeClass('d-none');
     }
 });
 

@@ -49,7 +49,7 @@ class DoctorController extends Controller
         ]);
 
         $imageUrl = 'dummy-image.jpg';
-        
+
         if (!empty($request->image)) {
             $file =$request->file('image');
             $extension = $file->getClientOriginalExtension(); 
@@ -74,7 +74,8 @@ class DoctorController extends Controller
             'user_id' => $user->id,
             'department_id' => $request->department,
             'description' => $request->description,
-            'speciality' => $request->speciality
+            'speciality' => $request->speciality,
+            'price' => $request->price
         ]);
 
         return redirect('/doctors')->with('success', 'Doctor has been added');

@@ -15,8 +15,10 @@ class ReferenceCountSeeder extends Seeder
      */
     public function run()
     {
-        ReferenceCount::create([
+        ReferenceCount::firstOrCreate([
             'type' => 'mr',
+
+        ],[
             'count' => 0
         ]);
     }

@@ -63,6 +63,11 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="Price">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
                                     <select name="department" class="form-control show-tick">
                                         <option value="">- Department -</option>
                                         @foreach($departments as $department)
