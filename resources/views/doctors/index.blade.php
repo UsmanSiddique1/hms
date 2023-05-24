@@ -48,7 +48,7 @@
                                     <td><span class="list-icon"><img class="avatar" src="../assets/images/xs/avatar1.jpg" alt=""></span></td>
                                     <td><span class="list-name">{{ $doctor->user->f_name }}</span></td>
                                     <td>{{ $doctor->speciality }}</td>
-                                    <td>{{ $doctor->department->name }}</td>
+                                    <td>{{ $doctor->department ? $doctor->department->name : '--' }}</td>
                                     <td>Update</td>
                                 </tr>
                                 @endforeach
