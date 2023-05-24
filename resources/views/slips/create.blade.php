@@ -29,7 +29,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="header">
-                    <h2><strong>Slip#{{ $new_slip }}</strong>  <small>Description text here...</small> </h2>                            
+                    <h2><strong>Slip#{{ $new_slip }}</strong>  <small>{{ now()->format('d-M-Y h:i A') }}</small> </h2>                            
                 </div>
                 <form action="{{ route('slips.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
