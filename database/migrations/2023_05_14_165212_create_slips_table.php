@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('slips', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('receptionist_id')->unsigned();
+            $table->unsignedBigInteger('receptionist_id');
             $table->string('slip_number')->unique();
-            $table->bigInteger('patient_id')->unsigned();
-            $table->bigInteger('doctor_id')->unsigned()->nullable();
-            $table->bigInteger('department_id')->unsigned()->nullable();
-            $table->bigInteger('bed_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->unsignedBigInteger('bed_id')->nullable();
             $table->enum('type', ['Emergency','IPD','OPD']);
             $table->bigInteger('total_amount');
             $table->bigInteger('bed_days')->nullable();
