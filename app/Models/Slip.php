@@ -14,10 +14,12 @@ class Slip extends Model
         'department_id',
         'doctor_id',
         'bed_id',
+        'bed_days',
         'type',
         'total_amount',
         'remaining_amount',
-        'description'
+        'description',
+        'slip_number'
     ];
 
     public function doctor()

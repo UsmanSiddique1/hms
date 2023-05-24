@@ -21,5 +21,12 @@ class ReferenceCountSeeder extends Seeder
         ],[
             'count' => 0
         ]);
+
+        ReferenceCount::firstOrCreate([
+            'type' => 'slip',
+
+        ],[
+            'count' => 0
+        ]);
     }
 }

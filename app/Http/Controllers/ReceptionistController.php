@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Receptionist;
+
+use Illuminate\Support\Facades\DB;
 
 class ReceptionistController extends Controller
 {
@@ -13,8 +17,8 @@ class ReceptionistController extends Controller
      */
     public function index()
     {
-        $receptionist = Receptionist::all();
-        return view('receptionists', compact('receptionist'));
+        $receptionists = Receptionist::all();
+        return view('receptionists.index', compact('receptionists'));
     }
 
     /**
@@ -24,7 +28,7 @@ class ReceptionistController extends Controller
      */
     public function create()
     {
-        //
+        return view('receptionists.create');
     }
 
     /**
@@ -35,38 +39,57 @@ class ReceptionistController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'f_name' => 'required',
-            'l_name' => 'required',
-            'phone' => 'required',
-            'email' => 'required',   
-            'shift' => 'required'         
-        ]);
+        try {
+            
+            $request->validate([
+                'f_name' => 'required',
+                'l_name' => 'required',
+                'phone' => 'required',
+                'email' => 'required',   
+                'shift' => 'required'         
+            ]);
+            
+            $imageUrl = 'dummy-user.png';
+            if (!empty($request->image)) {
+                $file =$request->file('image');
+                $extension = $file->getClientOriginalExtension(); 
+                $filename = time().'.' . $extension;
+                $file->move(public_path('uploads/doctors'), $filename);
+                $imageUrl = 'public/uploads/doctors'.$filename;
+            }
+            
+            DB::beginTransaction();
 
-        if (!empty($request->image)) {
-            $file =$request->file('image');
-            $extension = $file->getClientOriginalExtension(); 
-            $filename = time().'.' . $extension;
-            $file->move(public_path('uploads/doctors'), $filename);
-            $imageUrl = 'public/uploads/doctors'.$filename;
+            $user = User::create([
+                'f_name' => $request->f_name,
+                'l_name' => $request->l_name,
+                'phone' => $request->phone,
+                'dob' => $request->dob,
+                'email' => $request->email,
+                'image' => $imageUrl,
+                'role_id' => 3,
+                'gender' => $request->gender,
+                'password' => bcrypt($request->password)
+            ]);
+    
+            Receptionist::create([
+                'user_id' => $user->id,
+                'shift' => $request->shift,
+                'status' => 'closed',
+                'description' => $request->description
+            ]);
+
+            DB::commit();
+
+            return redirect('/receptionists')->with('success', 'Patient has been added');
+
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('success', 'Something went wrong'. $th);
         }
+        
 
-        $user = User::create([
-            'f_name' => $request->f_name,
-            'l_name' => $request->l_name,
-            'phone' => $request->phone,
-            'email' => $request->dob,
-            'image' => $imageUrl,
-            'gender' => $request->gender
-        ]);
-
-        User::create([
-            'user_id' => $user->id,
-            'shift' => $request->shift,
-            'status' => $request->status
-        ]);
-
-        return redirect('/patients')->with('success', 'Patient has been added');
     }
 
     /**

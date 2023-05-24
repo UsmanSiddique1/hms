@@ -45,37 +45,28 @@
                     </ul>
                 </div>
                 <div class="body">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="icon-magnifier"></i></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Search...">
-                    </div>
-                    <!-- Tab panes -->
-                    <div class="tab-content padding-0">
-                        <div class="tab-pane table-responsive active show" id="All">
-                            <table class="table mb-0 table-hover">
-                                <thead>
-                                    <tr>                                       
-                                        <th>ID</th>
-                                        <th>name</th>
-                                        <th>price</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($procedures as $key => $procedure)
-                                    <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td><span class="list-name">{{ $procedure->name }}</span></td>
-                                        <td>Rs.{{ $procedure->price }}</td>                                        
-                                    </tr>
-                                    @endforeach
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                            <thead>
+                                <tr>                                       
+                                    <th>ID</th>
+                                    <th>name</th>
+                                    <th>price</th>
                                     
-                                </tbody>
-                            </table>                            
-                        </div>                        
-                    </div>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($procedures as $key => $procedure)
+                                <tr>
+                                    <td>{{ ++$key }}</td>
+                                    <td><span class="list-name">{{ $procedure->name }}</span></td>
+                                    <td>Rs.{{ $procedure->price }}</td>                                        
+                                </tr>
+                                @endforeach
+                                
+                            </tbody>
+                        </table>                            
+                    </div> 
                 </div>
             </div>
         </div>

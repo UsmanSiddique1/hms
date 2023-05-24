@@ -17,6 +17,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div>
+                            <p class="lead"> <strong>{{ $slip->slip_number }}</strong></p>
                             <p class="lead"> Slip Type <span class="badge badge-primary">{{ $slip->type }}</span></p>
                             @if($slip->type == 'IPD')
                                 <p><strong>Room Number: </strong>{{ $slip->bed->number }}</p>                                

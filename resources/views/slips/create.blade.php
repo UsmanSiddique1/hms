@@ -29,7 +29,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="header">
-                    <h2>Basic Information <small>Description text here...</small> </h2>                            
+                    <h2><strong>Invoice#{{ $new_slip }}</strong>  <small>Description text here...</small> </h2>                            
                 </div>
                 <form action="{{ route('slips.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -66,7 +66,7 @@
                             </div>
                             <div class="col-sm-4 patient_details" id="name_div">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="patient_name" name="name" placeholder="Patient Name" required>
+                                    <input type="text" class="form-control" id="patient_name" name="name" placeholder="Patient Name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-6 patient_details" id="age_div">
@@ -116,7 +116,7 @@
                                     <select name="doctor" class="form-control show-tick" id="doctor">
                                         <option value="">Doctor</option>
                                         @foreach($doctors as $doctor)
-                                            <option value="{{ $doctor->id }}">{{ $doctor->user->full_name }} - ({{ $doctor->speciality }})</option>
+                                            <option data-price="{{ $doctor->price }}" value="{{ $doctor->id }}">{{ $doctor->user->full_name }} - ({{ $doctor->speciality }})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -126,7 +126,7 @@
                                     <select name="procedure[]" class="form-control show-tick" id="procedure" multiple>
                                         <option value="" readonly>Select Procedure</option>
                                         @foreach($procedures as $procedure)
-                                            <option value="{{ $procedure->id }}">{{ $procedure->name }} (Rs.{{ $procedure->price }})</option>
+                                            <option data-price="{{ $procedure->price }}" value="{{ $procedure->id }}">{{ $procedure->name }} (Rs.{{ $procedure->price }})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -139,6 +139,11 @@
                                             <option value="{{ $bed->id }}">{{ $bed->number }} (Rs.{{ $bed->price }})</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>  
+                            <div class="col-sm-4" id="bed_div">
+                                <div class="form-group">                                   
+                                    <input type="number" name="bed_days" class="form-control" placeholder="Days" id="bed_days">                                
                                 </div>
                             </div>                     
                         </div>
@@ -171,7 +176,7 @@
 @push('footer-scripts')
 
 <script>
-$('#doctor_div, #procedure_div, #bed_div, #gender_div, #image_div, #age_div').addClass('d-none');
+$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div').addClass('d-none');
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
@@ -179,19 +184,19 @@ $('#type').change(function(){
     {
         $(' #procedure_div').removeClass('d-none');
 
-        $('#doctor_div, #bed_div').addClass('d-none');
+        $('#doctor_div, #bed_div, #bed_days_div').addClass('d-none');
     }
     if(type == 'OPD')
     {
         $('#total_amount').val(0);
         $('#doctor_div').removeClass('d-none');
-        $('#bed_div').addClass('d-none');
+        $('#bed_div,#bed_days_div').addClass('d-none');
 
     }
     if(type == 'IPD')
     {
         $('#total_amount').val(0);
-        $('#doctor_div, #bed_div').removeClass('d-none');
+        $('#doctor_div, #bed_div, #bed_days_div').removeClass('d-none');
     }
 });
 
@@ -201,16 +206,36 @@ $('#select_patient').change(function(){
     {
         $('#gender_div, #image_div, #age_div').addClass('d-none');
         $('#mr_number').val('');
-
     }
     if(patient == 'new')
     {
         $('#gender_div, #image_div, #age_div').removeClass('d-none');
-        var new_mr = 'MR-'+$('#mr_number').data('new_mr');
+        var new_mr = 'MR#'+$('#mr_number').data('new_mr');
         
         $('#mr_number').val(new_mr);
     }
 });
+
+
+
+$('#procedure').change(function(){
+    var amount = 0;
+    console.log($(this).find(':selected'));
+    $(this).find(':selected').each(function(obj){
+        console.log(obj);
+        console.log($(this).find(':selected').data("price"));
+        amount += parseInt($(this).find(':selected').data('price'));
+    });
+    // console.log(amount);
+    // alert($(this).find(':selected').data('price'));
+    // var procedures = [];
+
+    // console.log($(this).data("price"));
+});
+
+// $('#procedure').find(':selected').each(function() {
+//     alert($(this).text() + ' ' + $(this).val());
+// });
 
 // $('#procedure').change(function(){
 //     console.log($(this).val());

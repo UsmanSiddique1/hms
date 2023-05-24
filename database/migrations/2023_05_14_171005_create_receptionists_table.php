@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('shift');
             $table->string('status');
+            $table->string('description')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

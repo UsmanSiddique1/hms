@@ -8,6 +8,7 @@ use App\Http\Controllers\SlipController;
 use App\Http\Controllers\BedController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ProcedureController;
+use App\Http\Controllers\ReceptionistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::resource('/departments', DepartmentController::class);
 Route::resource('/beds', BedController::class);
 Route::resource('/procedures', ProcedureController::class);
 Route::resource('/slips', SlipController::class);
+Route::resource('/receptionists', ReceptionistController::class);
 
 
 Route::get('/slip/{slip}', [SlipController::class, 'view']);
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

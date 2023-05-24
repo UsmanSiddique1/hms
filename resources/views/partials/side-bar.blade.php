@@ -46,10 +46,24 @@
                         </li>
                         <li><a href="{{ url('slips/create') }}" class=""><i class="fa fa-users"></i><span>Create Slip</span></a></li> 
 
+                        <li><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-user-md"></i><span>Slips</span></a>
+                            <ul>
+                                <li><a href="{{ url('slips') }}">All Slips</a></li>
+                                <li><a href="{{ url('slips/create') }}">Add Slip</a></li>
+                                
+                            </ul>
+                        </li>
                         <li><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-user-md"></i><span>Doctors</span></a>
                             <ul>
                                 <li><a href="{{ url('doctors') }}">All Doctors</a></li>
                                 <li><a href="{{ url('doctors/create') }}">Add Doctor</a></li>
+                                
+                            </ul>
+                        </li>
+                        <li><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-user-md"></i><span>Receptionist</span></a>
+                            <ul>
+                                <li><a href="{{ url('receptionists') }}">All Receptionists</a></li>
+                                <li><a href="{{ url('receptionists/create') }}">Add Receptionist</a></li>
                                 
                             </ul>
                         </li>

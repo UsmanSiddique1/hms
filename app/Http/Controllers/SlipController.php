@@ -35,15 +35,17 @@ class SlipController extends Controller
      */
     public function create()
     {
-        $ref_count = ReferenceCount::where('type', 'mr')->first();
-        $new_mr = $ref_count->count + 1;        
+        $ref_mr_count = ReferenceCount::where('type', 'mr')->first();
+        $new_mr = $ref_mr_count->count + 1;         
+        $ref_slip_count = ReferenceCount::where('type', 'slip')->first();
+        $new_slip = $ref_slip_count->count + 1; 
 
         $patients = Patient::all();
         $doctors = Doctor::all();
         $departments = Department::all();
         $beds = Bed::all();
         $procedures = Procedure::all();
-        return view('slips.create', compact('new_mr','patients','doctors','departments','beds','procedures'));
+        return view('slips.create', compact('new_mr','patients','doctors','departments','beds','procedures', 'new_slip'));
     }
 
     /**
@@ -73,6 +75,8 @@ class SlipController extends Controller
                 $imageUrl = 'public/uploads/patients'.$filename;
             }
 
+            
+
             $patient = Patient::where('mr_number', $request->mr_number)->first();
             
             if(!$patient)
@@ -87,9 +91,17 @@ class SlipController extends Controller
                     'gender' => $request->gender,
                     'image' => $imageUrl,
                 ]);
-            }            
-    
+            }      
+            
+           
+            $slip_number_count = ReferenceCount::where('type', 'slip')->first();
+            $slip_number_count->count = $slip_number_count->count + 1;
+            $slip_number_count->update();
+            
+            $slip_number = 'Slip#'. $slip_number_count->count;
+
             $slip = Slip::create([
+                'slip_number' => $slip_number,
                 'patient_id' => $patient->id,
                 'department_id' => $request->department,
                 'receptionist_id' => 1,
