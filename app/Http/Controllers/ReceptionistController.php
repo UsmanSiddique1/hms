@@ -67,7 +67,7 @@ class ReceptionistController extends Controller
                 'dob' => $request->dob,
                 'email' => $request->email,
                 'image' => $imageUrl,
-                'role_id' => 3,
+                'role_id' => 2,
                 'gender' => $request->gender,
                 'password' => bcrypt($request->password)
             ]);
