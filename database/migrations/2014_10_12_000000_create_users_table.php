@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('f_name');
             $table->string('l_name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
-            $table->bigInteger('phone')->nullable();
+            $table->bigInteger('phone')->unique();
             $table->date('dob')->nullable();
             $table->string('gender')->nullable();
             $table->string('image')->nullable();

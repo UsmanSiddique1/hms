@@ -15,6 +15,8 @@
                 <div class="d-flex flex-row-reverse">
                     <div class="page_action">
                         <!-- Nav tabs -->
+                        <a href="{{ route('departments.create') }}" class="btn btn-secondary">Add Department</a>
+
                       
                     </div>
                     <div class="p-2 d-flex">
@@ -40,6 +42,7 @@
                                 <tr>                                       
                                     <th>ID</th>
                                     <th>name</th>
+                                    <th>Action</th>
                                     
                                 </tr>
                             </thead>
@@ -48,7 +51,12 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td><span class="list-name">{{ $department->name }}</span></td>
-                                    
+                                    <td><button type="button" class="btn btn-primary edit-data"
+                                        data-id="{{ $department->id }}" 
+                                        data-name="{{ $department->name }}" 
+                                        >
+                                        Update
+                                      </button></td>  
                                 </tr>
                                 @endforeach
                                 
@@ -61,4 +69,44 @@
     </div>
 
 </div>
+<!-- Modal -->
+<div class="modal fade" id="updateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="updateForm" method="POST">
+        @csrf
+        @method('PUT')
+            <div class="modal-body">                
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                </div>
+                
+                
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+@push('footer-scripts')
+<script>
+    $('.edit-data').click(function(){       
+        $('#name').val($(this).data("name"));
+        var department_id = $(this).data('id');
+        $('#updateForm').attr('action',"{{ url('departments') }}/"+department_id);
+        $('#updateModel').modal().show();
+    });
+</script>
+@endpush
 @endsection

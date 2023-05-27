@@ -29,33 +29,43 @@
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="header">
-                    <h2>Basic Information <small>Description text here...</small> </h2>                            
+                    <h2>Basic Information <small>{{ $mr_number }}</small> </h2>                            
                 </div>
-                <form action="{{ route('patients.store') }}" mathod="POST">
+                <form action="{{ route('patients.store') }}" method="POST">
                     @csrf
+                    <input type="text" name="mr_number" value="{{ $mr_number }}" hidden>
                     <div class="body">
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="f_name" placeholder="First Name">
+                                    <input type="text" class="form-control" name="name" placeholder="Name" required>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="l_name" placeholder="Last Name">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="phone" placeholder="Phone No.">
+                                    <input type="number" class="form-control" name="phone" placeholder="Phone No." required>
                                 </div>
                             </div>
                         </div>
                         <div class="row clearfix">       
                             
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="age" placeholder="Age">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" id="patient_name" name="age_years" placeholder="Years">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" id="patient_name" name="age_months" placeholder="Months">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" id="patient_name" name="age_weeks" placeholder="Weeks">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">

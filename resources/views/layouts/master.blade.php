@@ -19,6 +19,8 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@stack('header-scripts')
 </head>
 
 <body data-theme="light" class="font-nunito">
@@ -67,6 +69,13 @@
 <script src="{{  asset('assets/vendor/jquery-datatable/buttons/buttons.html5.min.js') }}"></script>
 <script src="{{  asset('assets/vendor/jquery-datatable/buttons/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    }); 
+</script>
 @stack('footer-scripts')
 </body>
 </html>

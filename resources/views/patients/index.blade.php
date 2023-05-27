@@ -14,6 +14,7 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="d-flex flex-row-reverse">
                     <div class="page_action">
+                        <a href="{{ route('patients.create') }}" class="btn btn-secondary">Add Patient</a>
                         
                     </div>
                     <div class="p-2 d-flex">
@@ -41,6 +42,7 @@
                                     <th>Name</th>
                                     <th>Age</th>
                                     <th>Number</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,6 +53,20 @@
                                     <td>{{ $patient->name }}</td>
                                     <td>{{ $patient->age_years }}y , {{ $patient->age_months }}m, {{ $patient->age_weeks }}w</td>
                                     <td>{{ $patient->phone }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary edit-patient"
+                                        data-id="{{ $patient->id }}" 
+                                        data-mr_number="{{ $patient->mr_number }}" 
+                                        data-name="{{ $patient->name }}" 
+                                        data-age_years="{{ $patient->age_years }}" 
+                                        data-age_months="{{ $patient->age_months }}" 
+                                        data-age_weeks="{{ $patient->age_weeks }}" 
+                                        data-gender="{{ $patient->gender }}" 
+                                        data-phone="{{ $patient->phone }}" 
+                                        >
+                                        Update
+                                      </button>
+                                    </td>
                                 </tr>
                                 @endforeach
                                 
@@ -64,4 +80,75 @@
     </div>
 
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="updateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="updateForm" method="POST">
+        @csrf
+        @method('PUT')
+            <div class="modal-body">                
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="">Phone</label>
+                    <input type="text" class="form-control" name="phone" id="phone" disabled placeholder="phone">
+                </div>
+                <div class="form-group">
+                    <label for="">Age Years</label>
+                    <input type="text" class="form-control" name="age_years" id="age_years" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="">Age Months</label>
+                    <input type="text" class="form-control" name="age_months" id="age_months" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="">Age Weeks</label>
+                    <input type="text" class="form-control" name="age_weeks" id="age_weeks" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="">Gender</label>
+                    <select name="gender" id="gender" class="form-control">
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                
+                
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+@push('footer-scripts')
+<script>
+    $('.edit-patient').click(function(){
+        $('.modal-title').text($(this).data("mr_number"));
+        $('#name').val($(this).data("name"));
+        $('#phone').val($(this).data("phone"));
+        $('#gender').val($(this).data("gender"));
+        $('#age_years').val($(this).data("age_years"));
+        $('#age_months').val($(this).data("age_months"));
+        $('#age_weeks').val($(this).data("age_weeks"));
+        var patient_id = $(this).data('id');
+        $('#updateForm').attr('action',"{{ url('patients') }}/"+patient_id);
+        $('#updateModel').modal().show();
+    });
+</script>
+@endpush
 @endsection

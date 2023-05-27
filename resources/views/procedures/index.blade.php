@@ -8,13 +8,15 @@
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-dashboard"></i></a></li>                            
                     <li class="breadcrumb-item">Procedure</li>
-                    <li class="breadcrumb-item active">All Procedures</li>
+                    <li class="breadcrumb-item active">All Procedure</li>
                 </ul>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="d-flex flex-row-reverse">
                     <div class="page_action">
                         <!-- Nav tabs -->
+                        <a href="{{ route('procedures.create') }}" class="btn btn-secondary">Add Procedure</a>
+
                       
                     </div>
                     <div class="p-2 d-flex">
@@ -31,17 +33,7 @@
                 <div class="header">
                     <h2>Procedures List</h2>
                     <ul class="header-dropdown">
-                        {{-- <li><a class="tab_btn" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Weekly">W</a></li>
-                        <li><a class="tab_btn" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Monthly">M</a></li>
-                        <li><a class="tab_btn active" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Yearly">Y</a></li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="javascript:void(0);">Action</a></li>
-                                <li><a href="javascript:void(0);">Another Action</a></li>
-                                <li><a href="javascript:void(0);">Something else</a></li>
-                            </ul>
-                        </li> --}}
+                        
                     </ul>
                 </div>
                 <div class="body">
@@ -52,6 +44,7 @@
                                     <th>ID</th>
                                     <th>name</th>
                                     <th>price</th>
+                                    <th>Action</th>
                                     
                                 </tr>
                             </thead>
@@ -60,7 +53,14 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td><span class="list-name">{{ $procedure->name }}</span></td>
-                                    <td>Rs.{{ $procedure->price }}</td>                                        
+                                    <td>Rs.{{ $procedure->price }}</td>       
+                                    <td><button type="button" class="btn btn-primary edit-data"
+                                        data-id="{{ $procedure->id }}" 
+                                        data-name="{{ $procedure->name }}" 
+                                        data-price="{{ $procedure->price }}"
+                                        >
+                                        Update
+                                      </button></td>                                 
                                 </tr>
                                 @endforeach
                                 
@@ -73,4 +73,49 @@
     </div>
 
 </div>
+<!-- Modal -->
+<div class="modal fade" id="updateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="updateForm" method="POST">
+        @csrf
+        @method('PUT')
+            <div class="modal-body">                
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="">Price</label>
+                    <input type="text" class="form-control" name="price" id="price" placeholder="phone">
+                </div>
+                
+                
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+@push('footer-scripts')
+<script>
+    $('.edit-data').click(function(){       
+        $('#name').val($(this).data("name"));
+        $('#price').val($(this).data("price"));
+        var procedure_id = $(this).data('id');
+        $('#updateForm').attr('action',"{{ url('procedures') }}/"+procedure_id);
+        $('#updateModel').modal().show();
+    });
+</script>
+@endpush
 @endsection

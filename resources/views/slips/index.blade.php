@@ -59,7 +59,7 @@
                                     <td>{{ $slip->doctor ? $slip->doctor->user->f_name : '--' }}</td>
                                     <td><span class="badge {{ $slip->type == 'Emergency' ? 'badge-danger' : 'badge-primary' }}">{{ $slip->type }}</span></td>
                                     <td>Rs.{{ $slip->total_amount }}</td>
-                                    <td>Action</td>
+                                    <td><a href="{{ route('slips.show', $slip->id) }}" target="_blank" class="btn btn-primary"> View</a></td>
                                     
                                 </tr>
                                 @endforeach

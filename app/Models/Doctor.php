@@ -13,14 +13,19 @@ class Doctor extends Model
         'user_id',
         'speciality',
         'department_id',
-        'price'
-        // 'days',
-        // 'from',
-        // 'to'
+        'price',
+        'days',
+        'from',
+        'to'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 }

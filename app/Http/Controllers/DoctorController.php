@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 
 class DoctorController extends Controller
 {
@@ -17,7 +18,8 @@ class DoctorController extends Controller
     public function index()
     {
         $doctors = Doctor::all();
-        return view('doctors.index', compact('doctors'));
+        $departments = Department::all();
+        return view('doctors.index', compact('doctors','departments'));
     }
 
     /**
@@ -69,13 +71,17 @@ class DoctorController extends Controller
             'role_id' => 2,
             'password' => bcrypt('password')
         ]);
+        $days = json_encode($request->days);
 
         Doctor::create([
             'user_id' => $user->id,
             'department_id' => $request->department,
             'description' => $request->description,
             'speciality' => $request->speciality,
-            'price' => $request->price
+            'price' => $request->price,
+            'days' => $days,
+            'from' => $request->from,
+            'to' => $request->to
         ]);
 
         return redirect('/doctors')->with('success', 'Doctor has been added');
@@ -110,9 +116,61 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Doctor $doctor)
     {
-        //
+        try {
+        $request->validate([
+            'f_name' => 'required',
+            'l_name' => 'required',
+            'speciality' => 'required',
+        ]);
+
+        $imageUrl = 'dummy-image.jpg';
+
+        if (!empty($request->image)) {
+            $file =$request->file('image');
+            $extension = $file->getClientOriginalExtension(); 
+            $filename = time().'.' . $extension;
+            $file->move(public_path('uploads/doctors'), $filename);
+            $imageUrl = 'public/uploads/doctors'.$filename;
+        }
+        
+        DB::beginTransaction();
+
+        $doctor->user->update([
+            'f_name' => $request->f_name,
+            'l_name' => $request->l_name,
+            'dob' => $request->dob,
+            'image' => $imageUrl,
+            'gender' => $request->gender,            
+        ]);
+
+        // $days = json_encode($request->days);
+        $doctor->update([
+            'department_id' => $request->department_id,
+            'description' => $request->description,
+            'speciality' => $request->speciality,
+            'price' => $request->price,
+            // 'days' => $days,
+            // 'from' => $request->from,
+            // 'to' => $request->to
+        ]);
+
+
+
+
+
+        DB::commit();
+
+        return redirect('/doctors')->with('success', 'Doctor has been updated');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return redirect('/doctors')->with('error', 'Something went wrong'. $th);
+
+        }
+        
     }
 
     /**

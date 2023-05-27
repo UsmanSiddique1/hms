@@ -14,8 +14,6 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="d-flex flex-row-reverse">
                     <div class="page_action">
-                        {{-- <button type="button" class="btn btn-primary"><i class="fa fa-download"></i> Download report</button>
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addevent">Add New Event</button> --}}
                     </div>
                     <div class="p-2 d-flex">
                         
@@ -37,12 +35,12 @@
                         <div class="row clearfix">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="f_name" placeholder="First Name">
+                                    <input type="text" class="form-control" name="f_name" placeholder="First Name" required>
                                 </div>
                             </div>  
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="l_name" placeholder="Last Name">
+                                    <input type="text" class="form-control" name="l_name" placeholder="Last Name" required>
                                 </div>
                             </div>                        
                         </div>
@@ -54,7 +52,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <select name="gender" class="form-control show-tick">
+                                    <select name="gender" class="form-control show-tick" required>
                                         <option value="">- Gender -</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
@@ -63,12 +61,12 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input type="number" class="form-control" placeholder="Price">
+                                    <input type="number" class="form-control" name="price" placeholder="Price" required>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <select name="department" class="form-control show-tick">
+                                    <select name="department" class="form-control show-tick" required>
                                         <option value="">- Department -</option>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -78,17 +76,61 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="speciality" placeholder="Speciality">
+                                    <input type="text" class="form-control" name="speciality" placeholder="Speciality" required>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="phone" placeholder="Phone">
+                                    <input type="text" class="form-control" name="phone" placeholder="Phone" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="email" placeholder="Enter Your Email">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" value="Monday" type="checkbox" id="mondayCheckbox">
+                                      <label class="form-check-label" for="mondayCheckbox">Monday</label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" value="Tuesday" type="checkbox" id="tuesdayCheckbox">
+                                      <label class="form-check-label" for="tuesdayCheckbox">Tuesday</label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" value="Wednesday" type="checkbox" id="wednesdayCheckbox">
+                                      <label class="form-check-label" for="wednesdayCheckbox">Wednesday</label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" value="Thursday" type="checkbox" id="thursdayCheckbox">
+                                      <label class="form-check-label" for="thursdayCheckbox">Thursday</label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" value="Friday" type="checkbox" id="fridayCheckbox">
+                                      <label class="form-check-label" for="fridayCheckbox">Friday</label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" value="Saturday" type="checkbox" id="saturdayCheckbox">
+                                      <label class="form-check-label" for="saturdayCheckbox">Saturday</label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" name="days[]" type="checkbox" value="Sunday" id="sundayCheckbox">
+                                      <label class="form-check-label" for="sundayCheckbox">Sunday</label>
+                                    </div>
+                                  </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="timeInput">From Time</label>
+                                    <input type="time" id="timeInput" class="form-control" name="from">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="timeInput">To Time</label>
+                                    <input type="time" id="timeInput" class="form-control" name="to">
                                 </div>
                             </div>
                             <div class="col-sm-6">

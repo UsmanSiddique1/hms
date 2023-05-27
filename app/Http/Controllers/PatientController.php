@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Patient;
+use App\Models\ReferenceCount;
+use App\Http\Requests\PatientStoreRequest;
 
 class PatientController extends Controller
 {
@@ -13,7 +15,7 @@ class PatientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {     
         $patients = Patient::all();
         return view('patients.index', compact('patients'));
     }
@@ -25,7 +27,10 @@ class PatientController extends Controller
      */
     public function create()
     {
-        return view('patients.create');
+        $ref_mr_count = ReferenceCount::where('type', 'mr')->first();
+        $mr_number = 'MR#'.$ref_mr_count->count + 1;   
+
+        return view('patients.create', compact('mr_number'));
     }
 
     /**
@@ -34,9 +39,10 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PatientStoreRequest $request)
     {
-        return $request;
+
+        $imageUrl = 'dummy-user.jpg';
         
         if (!empty($request->image)) {
             $file =$request->file('image');
@@ -47,11 +53,12 @@ class PatientController extends Controller
         }
 
         Patient::create([
-            'mr' => $request->mr,
-            'f_name' => $request->f_name,
-            'l_name' => $request->l_name,
+            'mr_number' => $request->mr_number,            
+            'name' => $request->name,
             'phone' => $request->phone,
-            'age' => $request->age,
+            'age_years' => $request->age_years,
+            'age_months' => $request->age_months,
+            'age_weeks' => $request->age_weeks,
             'gender' => $request->gender,
             'image' => $imageUrl,
         ]);
@@ -88,9 +95,28 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Patient $patient)
     {
-        //
+                
+        $imageUrl = $patient->image;
+        if (!empty($request->image)) {
+            $file =$request->file('image');
+            $extension = $file->getClientOriginalExtension(); 
+            $filename = time().'.' . $extension;
+            $file->move(public_path('uploads/patients'), $filename);
+            $imageUrl = 'public/uploads/patients'.$filename;
+        }
+
+        $patient->update([
+            'name' => $request->name,
+            'age_years' => $request->age_years,
+            'age_months' => $request->age_months,
+            'age_weeks' => $request->age_weeks,
+            'gender' => $request->gender,
+            'image' => $imageUrl,
+        ]);
+
+        return redirect('/patients')->with('success', 'Patient has been added');
     }
 
     /**

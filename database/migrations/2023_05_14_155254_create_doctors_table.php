@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('department_id')->unsigned();
             $table->string('speciality');
             $table->text('description')->nullable();
-            $table->string('days')->nullable();
+            $table->json('days')->nullable();
             $table->string('from')->nullable();
             $table->string('to')->nullable();
             $table->bigInteger('price')->nullable();

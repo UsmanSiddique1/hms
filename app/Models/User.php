@@ -48,13 +48,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function doctors()
+    public function doctor()
     {
-        return $this->hasMany(Doctor::class);
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function receptionist()
+    {
+        return $this->hasOne(Receptionist::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public function getFullNameAttribute()
     {
         return $this->f_name. ' ' . $this->l_name;
+    }
+
+    public function getRoleNameAttribute()
+    {
+        return $this->role->name;
     }
 }

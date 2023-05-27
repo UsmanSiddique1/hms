@@ -11,6 +11,8 @@ use App\Models\Department;
 use App\Models\Bed;
 use App\Models\Slip;
 use App\Models\SlipProcedure;
+use App\Models\Receptionist;
+use Auth;
 
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +47,8 @@ class SlipController extends Controller
         $departments = Department::all();
         $beds = Bed::all();
         $procedures = Procedure::all();
-        return view('slips.create', compact('new_mr','patients','doctors','departments','beds','procedures', 'new_slip'));
+        $receptionists = Receptionist::all();
+        return view('slips.create', compact('new_mr','patients','doctors','departments','beds','procedures', 'new_slip','receptionists'));
     }
 
     /**
@@ -99,12 +102,12 @@ class SlipController extends Controller
             $slip_number_count->update();
             
             $slip_number = 'Slip#'. $slip_number_count->count;
-
+            $receptionist_id = $request->receptionist_id != '' ? $request->receptionist_id : Auth::user()->receptionist->id;
             $slip = Slip::create([
                 'slip_number' => $slip_number,
                 'patient_id' => $patient->id,
                 'department_id' => $request->department,
-                'receptionist_id' => 1,
+                'receptionist_id' => $receptionist_id,
                 'bed_id' => $request->bed,
                 'doctor_id' => $request->doctor,
                 'type' => $request->type,
@@ -140,12 +143,7 @@ class SlipController extends Controller
             
         }      
 
-        return redirect('/slip/'.$slip->id);
-
-        
-
-
-
+        return redirect('/slips/'.$slip->id);
     }
 
     /**
@@ -154,9 +152,10 @@ class SlipController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Slip $slip)
     {
-        //
+        return view('slips.view', compact('slip'));
+
     }
 
 

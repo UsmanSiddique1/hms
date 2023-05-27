@@ -121,9 +121,54 @@ class ReceptionistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Receptionist $receptionist)
     {
-        //
+        try {
+            
+            $request->validate([
+                'f_name' => 'required',
+                'l_name' => 'required',
+            ]);
+            
+            $imageUrl = 'dummy-user.png';
+            if (!empty($request->image)) {
+                $file =$request->file('image');
+                $extension = $file->getClientOriginalExtension(); 
+                $filename = time().'.' . $extension;
+                $file->move(public_path('uploads/doctors'), $filename);
+                $imageUrl = 'public/uploads/doctors'.$filename;
+            }
+
+            $password = $request->password != '' ? bcrypt($request->password) : $receptionist->user->password;
+            
+            DB::beginTransaction();
+
+            $receptionist->user->update([
+                'f_name' => $request->f_name,
+                'l_name' => $request->l_name,                
+                'dob' => $request->dob,
+                'image' => $imageUrl,
+                'gender' => $request->gender,
+                'gender' => $request->gender,
+                'password' => $password
+                
+            ]);
+    
+            $receptionist->update([
+                'shift' => $request->shift,
+                'status' => $request->status,
+                'description' => $request->description
+            ]);
+
+            DB::commit();
+
+            return redirect('/receptionists')->with('success', 'Patient has been added');
+
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', 'Something went wrong'. $th);
+        }
     }
 
     /**
