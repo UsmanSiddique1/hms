@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class AdminSeeder extends Seeder
 {
@@ -23,7 +25,7 @@ class AdminSeeder extends Seeder
             'l_name' => 'Admin',
             'email' => 'admin@gmail.com',
             'role_id' => 1,
-            'password' => bcrypt('12345678')
+            'password' =>   Hash::make('12345678')
         ]);
     }
 }

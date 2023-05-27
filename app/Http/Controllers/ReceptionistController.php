@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Receptionist;
+use Illuminate\Support\Facades\Hash;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -69,7 +71,7 @@ class ReceptionistController extends Controller
                 'image' => $imageUrl,
                 'role_id' => 2,
                 'gender' => $request->gender,
-                'password' => bcrypt($request->password)
+                'password' => Hash::make($request->password)
             ]);
     
             Receptionist::create([
