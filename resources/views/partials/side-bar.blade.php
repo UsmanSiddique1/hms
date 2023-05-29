@@ -43,16 +43,14 @@
                                 
                             </ul>
                         </li>
+                        @if(Auth::user()->role->name == 'Admin')
                         <li><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-user-md"></i><span>Doctors</span></a>
                             <ul>
-                                <li><a href="{{ url('doctors') }}">All Doctors</a></li>
-                                @if(Auth::user()->role->name == 'Admin')
+                                <li><a href="{{ url('doctors') }}">All Doctors</a></li>                                
                                 <li><a href="{{ url('doctors/create') }}">Add Doctor</a></li>
-                                @endif
                                 
                             </ul>
                         </li>
-                        @if(Auth::user()->role->name == 'Admin')
                         <li><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-user-md"></i><span>Receptionist</span></a>
                             <ul>
                                 <li><a href="{{ url('receptionists') }}">All Receptionists</a></li>

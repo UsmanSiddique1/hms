@@ -25,19 +25,24 @@ use App\Http\Controllers\ReceptionistController;
 //     return view('welcome');
 // });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware'=> ['auth']], function(){
 
     Route::get('/', [AdminController::class, 'dashboard']);
-    Route::resource('/doctors', DoctorController::class);
-    Route::resource('/patients', PatientController::class);
-    Route::resource('/departments', DepartmentController::class);
-    Route::resource('/beds', BedController::class);
-    Route::resource('/procedures', ProcedureController::class);
     Route::resource('/slips', SlipController::class);
-    Route::resource('/receptionists', ReceptionistController::class);
+
+    Route::group(['middleware' => ['check.admin']], function(){
+        Route::resource('/doctors', DoctorController::class);
+        Route::resource('/patients', PatientController::class);
+        Route::resource('/departments', DepartmentController::class);
+        Route::resource('/beds', BedController::class);
+        Route::resource('/procedures', ProcedureController::class);
+        Route::resource('/receptionists', ReceptionistController::class);
+    });
+    
+    
 });
 
 
