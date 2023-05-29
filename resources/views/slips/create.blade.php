@@ -50,11 +50,32 @@
                             <div class="col-sm-4 {{ Auth::user()->role_name == 'Admin' ? '' : 'd-none'}}" id="employee_div" >
                                 <div class="form-group">
                                     <label for="">Select Receptionist</label>
-                                    <select name="receptionist_id" class="form-control show-tick " {{ Auth::user()->role_name == 'Admin' ? 'required' : '' }}>
+                                    <select name="receptionist_id" class="form-control show-tick select2" {{ Auth::user()->role_name == 'Admin' ? 'required' : '' }}>
                                         <option value="">Receptionist</option>
                                         @foreach($receptionists as $receptionist)
                                         <option value="{{ $receptionist->id }}">{{ $receptionist->user->full_name }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                             
+                            <div class="col-sm-4" id="select_patient_div">
+                                <div class="form-group">
+                                        <label for="">Patient Type</label>
+                                        <select class="form-control show-tick" id="select_patient" required>
+                                            <option value="">Select Patient</option>
+                                            <option value="existing">Existing</option>
+                                            <option value="new">New</option>
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="col-sm-4" id="search_patient_div">
+                                <div class="form-group">
+                                        <label for="">Patient Search By</label>
+                                        <select class="form-control show-tick" id="search_patient">
+                                            <option value="">Search By</option>
+                                            <option value="mr">MR</option>
+                                            <option value="phone">Phone</option>
                                     </select>
                                 </div>
                             </div> 
@@ -69,26 +90,17 @@
                                     </select>
                                 </div>
                             </div> 
-                            <div class="col-sm-4" id="select_patient_div">
-                                <div class="form-group">
-                                        <label for="">Patient Type</label>
-                                        <select class="form-control show-tick" id="select_patient" required>
-                                            <option value="">Select Patient</option>
-                                            <option value="existing">Existing</option>
-                                            <option value="new">New</option>
-                                    </select>
-                                </div>
-                            </div>  
+                             
                             <div class="col-sm-4" id="mr_number_div">
-                                <div class="form-group">
-                                            <label for="">MR Number</label>
-                                            <input type="text" class="form-control" name="mr_number" data-new_mr="{{ $new_mr }}" id="mr_number" placeholder="MR#" required>
-                                </div>
+                                
+                            </div>
+                            <div class="col-sm-3" id="phone_div">
+                                
                             </div>
                             <div class="col-sm-4 patient_details" id="name_div">
                                 <div class="form-group">
-                                            <label for="">Patient Name *</label>
-                                            <input type="text" class="form-control" id="patient_name" name="name" placeholder="Patient Name" value="{{ old('name') }}" required>
+                                        <label for="">Patient Name *</label>
+                                        <input type="text" class="form-control" id="patient_name" name="name" placeholder="Patient Name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-6 patient_details" id="age_div">
@@ -126,9 +138,7 @@
                                 </div>
                             </div>
                             
-                            <div class="col-sm-3" id="phone_div">
-                                
-                            </div>
+                            
                             
                             {{-- <div class="col-sm-6" id="image_div">
                                 <div class="form-group">
@@ -184,7 +194,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input class="form-control" name="total_amount" id="total_amount" placeholder="Total" required>
+                                    <input class="form-control" name="total_amount" id="total_amount" placeholder="Total" readonly required min="1">
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -204,7 +214,7 @@
 @push('footer-scripts')
 
 <script>
-$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div').addClass('d-none');
+$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div').addClass('d-none');
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
@@ -212,6 +222,7 @@ $('#type').change(function(){
     {
 
         $('#procedure_div').removeClass('d-none');
+        $('#procedure').attr("required","required");
         $('#doctor_div, #bed_div, #bed_days_div').addClass('d-none');
     }
     if(type == 'OPD')
@@ -219,6 +230,7 @@ $('#type').change(function(){
         $('#total_amount').val(0);
         $('#doctor_div').removeClass('d-none');
         $('#bed_div,#bed_days_div,#procedure_div').addClass('d-none');
+        $('#procedure').removeAttr("required")
 
     }
     if(type == 'IPD')
@@ -226,6 +238,8 @@ $('#type').change(function(){
         $('#total_amount').val(0);
         $('#procedure_div').addClass('d-none');
         $('#doctor_div, #bed_div, #bed_days_div').removeClass('d-none');
+        $('#procedure_div').removeAttr("required")
+
     }
 });
 
@@ -239,8 +253,69 @@ $('#select_patient').change(function(){
     var patient = $(this).val();
     if(patient == 'existing')
     {
-        $('#phone_div_new').remove();
-        $('#gender_div, #image_div, #age_div').addClass('d-none');
+        $('#mr_number').val('');
+
+        $('#search_patient_div').removeClass('d-none');       
+        
+    }
+    if(patient == 'new')
+    {   
+
+        $('#search_patient_div,#name_div').addClass('d-none');
+        $('#phone_div_existing,#phone_div_new,#phone_div_new').remove();
+        var new_patient = `<div class="form-group" id="phone_div_new">    
+                <label for="">Phone</label>
+                <input type="number" name="phone" class="form-control" placeholder="Phone">                                
+            </div>`
+        
+        $('#phone_div').append(new_patient);
+
+        $('#mr_div_existing,#mr_div_existing_input,#mr_div_new').remove();
+        $('#mr_number').val('');
+        var new_mr = `<div class="form-group" id="mr_div_new">    
+                <label for="">MR Number</label>
+                <input type="text" class="form-control" name="mr_number" id="mr_number" data-new_mr="{{ $new_mr }}" value="{{ $new_mr }}" placeholder="MR#" required="">                                
+            </div>`
+        
+        $('#mr_number_div').append(new_mr);
+        
+        $('#gender_div, #image_div, #age_div,#name_div').removeClass('d-none');
+        
+    }
+});
+
+$('#search_patient').change(function(){
+    if($(this).val() == 'mr')
+    {
+        $('#mr_div_new, #mr_div_existing,#mr_div_existing_input,#phone_div_existing').remove();
+        var existing_mr = `<div class="form-group" id="mr_div_existing">
+                                    <label for="">MR Number</label>
+                                    <select name="mr_number" class="form-control select2" id="select_mr">
+                                        <option value="">Select MR</option>
+                                        @foreach($patients as $patient)
+                                            <option value="{{ $patient->id }}" 
+                                                data-phone="{{ $patient->phone }}"
+                                                data-name="{{ $patient->name }}"
+                                                >{{ $patient->mr_number }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>`
+        $('#mr_number_div').append(existing_mr);
+
+        var exiting_patient_phone = `<div class="form-group" id="phone_div_new">    
+                <label for="">Phone</label>
+                <input type="number" name="phone" class="form-control" id="existing_phone" placeholder="Phone">                                
+            </div>`
+        
+        $('#phone_div').append(exiting_patient_phone); 
+        
+        $('#name_div').removeClass('d-none');
+        refreshSelect2();
+    }
+    else if($(this).val() == 'phone')
+    {
+        $('#mr_div_existing,#mr_div_existing_input,#phone_div_new').remove();
+        $('#gender_div, #image_div, #age_div, #phone_div_existing').addClass('d-none');
         var existing_patient =`<div class="form-group" id="phone_div_existing">
                                     <label for="">Phone</label>
                                     <select name="phone" class="form-control select2" id="select_phone">
@@ -252,29 +327,24 @@ $('#select_patient').change(function(){
                                                 >{{ $patient->phone }}</option>
                                         @endforeach
                                     </select>
-                                </div>`
+                                </div>`;
         $('#mr_number').val('');
-        $('#phone_div').append(existing_patient);
         refreshSelect2();
-    }
-    if(patient == 'new')
-    {   
-        $('#phone_div_existing').remove();
-        var new_patient = `<div class="form-group" id="phone_div_new">    
-                <label for="">Phone</label>
-                <input type="number" name="phone" class="form-control" placeholder="Phone">                                
+
+        $('#phone_div').append(existing_patient);
+
+        var existing_mr = `<div class="form-group" id="mr_div_existing_input">    
+                <label for="">MR Number</label>
+                <input type="text" class="form-control" name="mr_number" id="existing_mr_number" placeholder="MR#" required="">                                
             </div>`
         
-        $('#phone_div').append(new_patient);
-        
-        $('#gender_div, #image_div, #age_div').removeClass('d-none');
+        $('#mr_number_div').append(existing_mr);
 
-        var new_mr = 'MR#'+$('#mr_number').data('new_mr');
-        
-        $('#mr_number').val(new_mr);
+        $('#name_div').removeClass('d-none');
+
+
     }
 });
-
 
 
 $('#procedure').change(function(){
@@ -307,9 +377,20 @@ $('#procedure').change(function(){
 // });
 
 $(document).on('change', '#select_phone', function() {
-    $('#mr_number').val($(this).find(':selected').data("mr_number"));
-    console.log($(this).find(':selected').data("name"));
-    $('#patient_name').val($(this).find(':selected').data("name"));
+    var existing_mr_number = $(this).find(':selected').data("mr_number");
+    var name = $(this).find(':selected').data("name");
+    console.log(existing_mr_number,name);
+    $('#patient_name').val(name);
+    $('#existing_mr_number').val(existing_mr_number);
+});
+
+$(document).on('change', '#select_mr', function() {
+    var phone = $(this).find(':selected').data("phone");
+    var name = $(this).find(':selected').data("name");
+    
+    console.log(phone,name);
+    $('#patient_name').val(name);
+    $('#existing_phone').val(phone);
 });
 
     function calculateTotal() {
