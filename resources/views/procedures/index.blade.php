@@ -59,8 +59,13 @@
                                         data-name="{{ $procedure->name }}" 
                                         data-price="{{ $procedure->price }}"
                                         >
-                                        Update
-                                      </button></td>                                 
+                                        <i class="fa fa-pencil"></i>
+                                          </button>
+                                          <a href="javascript:void(0)" class="delete btn btn-danger" 
+                                          data-id="{{ $procedure->id }}"
+                                          data-name="{{ $procedure->name }}"
+                                            ><i class="fa fa-trash"></i></a>
+                                    </td>                                 
                                 </tr>
                                 @endforeach
                                 
@@ -105,8 +110,31 @@
         </form>
       </div>
     </div>
-  </div>
-
+</div>
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Doctor <strong>"<span id="procedure_name"></span>"</strong> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="deleteForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('DELETE')
+            <div class="modal-body"> 
+                <strong>Alert!</strong> This Action will not be UNDO.
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">DELETE NOW</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 @push('footer-scripts')
 <script>
     $('.edit-data').click(function(){       
@@ -115,6 +143,14 @@
         var procedure_id = $(this).data('id');
         $('#updateForm').attr('action',"{{ url('procedures') }}/"+procedure_id);
         $('#updateModel').modal().show();
+    });
+
+    $('.delete').click(function(){
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        $('#procedure_name').text(name);
+        $('#deleteForm').attr('action',"{{ url('procedures') }}/"+id);
+        $('#deleteModel').modal().show();
     });
 </script>
 @endpush

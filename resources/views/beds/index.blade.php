@@ -58,8 +58,13 @@
                                         data-number="{{ $bed->number }}" 
                                         data-price="{{ $bed->price }}"
                                         >
-                                        Update
-                                      </button></td>                                
+                                        <i class="fa fa-pencil"></i>
+                                      </button>
+                                      <a href="javascript:void(0)" class="delete btn btn-danger" 
+                                          data-id="{{ $bed->id }}"
+                                          data-number="{{ $bed->number }}"
+                                            ><i class="fa fa-trash"></i></a>
+                                    </td>                                
                                     
                                 </tr>
                                 @endforeach
@@ -105,8 +110,31 @@
         </form>
       </div>
     </div>
-  </div>
-
+</div>
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Bed <strong>"<span id="bed_number"></span>"</strong> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="deleteForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('DELETE')
+            <div class="modal-body"> 
+                <strong>Alert!</strong> This Action will not be UNDO.
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">DELETE NOW</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 @push('footer-scripts')
 <script>
     $('.edit-data').click(function(){       
@@ -115,6 +143,14 @@
         var bed_id = $(this).data('id');
         $('#updateForm').attr('action',"{{ url('beds') }}/"+bed_id);
         $('#updateModel').modal().show();
+    });
+
+    $('.delete').click(function(){
+        var id = $(this).data('id');
+        var number = $(this).data('number');
+        $('#bed_number').text(number);
+        $('#deleteForm').attr('action',"{{ url('beds') }}/"+id);
+        $('#deleteModel').modal().show();
     });
 </script>
 @endpush

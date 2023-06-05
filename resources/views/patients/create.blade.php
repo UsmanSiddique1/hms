@@ -46,6 +46,11 @@
                                     <input type="number" class="form-control" name="phone" placeholder="Phone No." required>
                                 </div>
                             </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="cnic" placeholder="Phone No." required>
+                                </div>
+                            </div>
                         </div>
                         <div class="row clearfix">       
                             

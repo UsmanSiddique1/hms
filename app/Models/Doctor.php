@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Doctor extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -19,6 +20,20 @@ class Doctor extends Model
         'to'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($doctor) {
+            $doctor->user()->delete();
+            foreach($doctor->slips as $slip)
+            {
+                $slip->delete();
+            }
+            
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -27,5 +42,10 @@ class Doctor extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function slips()
+    {
+        return $this->hasMany(Slip::class);
     }
 }

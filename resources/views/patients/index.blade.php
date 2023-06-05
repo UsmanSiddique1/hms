@@ -40,6 +40,7 @@
                                     <th>Media</th>
                                     <th>MR Number</th>
                                     <th>Name</th>
+                                    <th>CNIC</th>
                                     <th>Age</th>
                                     <th>Number</th>
                                     <th>Action</th>
@@ -51,6 +52,7 @@
                                     <td><span class="list-icon"><img class="avatar" src="../assets/images/xs/avatar1.jpg" alt=""></span></td>
                                     <td><span class="list-name">{{ $patient->mr_number }}</span></td>
                                     <td>{{ $patient->name }}</td>
+                                    <td>{{ $patient->cnic }}</td>
                                     <td>{{ $patient->age_years }}y , {{ $patient->age_months }}m, {{ $patient->age_weeks }}w</td>
                                     <td>{{ $patient->phone }}</td>
                                     <td>
@@ -64,8 +66,12 @@
                                         data-gender="{{ $patient->gender }}" 
                                         data-phone="{{ $patient->phone }}" 
                                         >
-                                        Update
-                                      </button>
+                                        <i class="fa fa-pencil"></i>
+                                          </button>
+                                          <a href="javascript:void(0)" class="delete btn btn-danger" 
+                                          data-id="{{ $patient->id }}"
+                                          data-name="{{ $patient->name }}"
+                                            ><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -104,6 +110,10 @@
                     <input type="text" class="form-control" name="phone" id="phone" disabled placeholder="phone">
                 </div>
                 <div class="form-group">
+                    <label for="">Cnic</label>
+                    <input type="text" class="form-control" name="cnic" id="phone" disabled placeholder="phone">
+                </div>
+                <div class="form-group">
                     <label for="">Age Years</label>
                     <input type="text" class="form-control" name="age_years" id="age_years" placeholder="Name">
                 </div>
@@ -134,7 +144,30 @@
       </div>
     </div>
   </div>
-
+  <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Patient <strong>"<span id="patient_name"></span>"</strong> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="deleteForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('DELETE')
+            <div class="modal-body"> 
+                <strong>Alert!</strong> This Action will not be UNDO.
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">DELETE NOW</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 @push('footer-scripts')
 <script>
     $('.edit-patient').click(function(){
@@ -148,6 +181,14 @@
         var patient_id = $(this).data('id');
         $('#updateForm').attr('action',"{{ url('patients') }}/"+patient_id);
         $('#updateModel').modal().show();
+    });
+
+    $('.delete').click(function(){
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        $('#patient_name').text(name);
+        $('#deleteForm').attr('action',"{{ url('patients') }}/"+id);
+        $('#deleteModel').modal().show();
     });
 </script>
 @endpush

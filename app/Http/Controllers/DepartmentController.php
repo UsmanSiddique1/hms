@@ -81,8 +81,9 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( Department $department)
     {
-        //
+        $department->delete();
+        return back()->with('status', 'Department has been deleted');
     }
 }

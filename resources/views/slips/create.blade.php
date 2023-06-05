@@ -137,6 +137,13 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-sm-4" id="cnic_div">
+                                <div class="form-group">
+                                    <label for="">CNIC</label>
+                                    <input type="number" name="cnic" class="form-control" id="cnic">
+                                </div>
+                            </div>
                             
                             
                             
@@ -214,7 +221,7 @@
 @push('footer-scripts')
 
 <script>
-$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div').addClass('d-none');
+$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div,#cnic_div').addClass('d-none');
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
@@ -254,8 +261,10 @@ $('#select_patient').change(function(){
     if(patient == 'existing')
     {
         $('#mr_number').val('');
+        $('#mr_div_new, #mr_div_existing,#mr_div_existing_input,#phone_div_existing,#mr_div_new,#phone_div_new').remove();
 
         $('#search_patient_div').removeClass('d-none');       
+        $('#search_patient').val('');
         
     }
     if(patient == 'new')
@@ -279,7 +288,7 @@ $('#select_patient').change(function(){
         
         $('#mr_number_div').append(new_mr);
         
-        $('#gender_div, #image_div, #age_div,#name_div').removeClass('d-none');
+        $('#gender_div, #image_div, #age_div,#name_div,#cnic_div').removeClass('d-none');
         
     }
 });
@@ -287,15 +296,16 @@ $('#select_patient').change(function(){
 $('#search_patient').change(function(){
     if($(this).val() == 'mr')
     {
-        $('#mr_div_new, #mr_div_existing,#mr_div_existing_input,#phone_div_existing').remove();
+        $('#mr_div_new, #mr_div_existing,#mr_div_existing_input,#phone_div_existing,#mr_div_new').remove();
         var existing_mr = `<div class="form-group" id="mr_div_existing">
                                     <label for="">MR Number</label>
                                     <select name="mr_number" class="form-control select2" id="select_mr">
                                         <option value="">Select MR</option>
                                         @foreach($patients as $patient)
-                                            <option value="{{ $patient->id }}" 
+                                            <option value="{{ $patient->mr_number }}" 
                                                 data-phone="{{ $patient->phone }}"
                                                 data-name="{{ $patient->name }}"
+                                                data-cnic="{{ $patient->cnic }}"
                                                 >{{ $patient->mr_number }}</option>
                                         @endforeach
                                     </select>
@@ -309,7 +319,7 @@ $('#search_patient').change(function(){
         
         $('#phone_div').append(exiting_patient_phone); 
         
-        $('#name_div').removeClass('d-none');
+        $('#name_div,#cnic_div').removeClass('d-none');
         refreshSelect2();
     }
     else if($(this).val() == 'phone')
@@ -324,6 +334,7 @@ $('#search_patient').change(function(){
                                             <option value="{{ $patient->id }}" 
                                                 data-mr_number="{{ $patient->mr_number }}"
                                                 data-name="{{ $patient->name }}"
+                                                data-cnic="{{ $patient->cnic }}"
                                                 >{{ $patient->phone }}</option>
                                         @endforeach
                                     </select>
@@ -340,7 +351,7 @@ $('#search_patient').change(function(){
         
         $('#mr_number_div').append(existing_mr);
 
-        $('#name_div').removeClass('d-none');
+        $('#name_div,#cnic_div').removeClass('d-none');
 
 
     }
@@ -379,17 +390,21 @@ $('#procedure').change(function(){
 $(document).on('change', '#select_phone', function() {
     var existing_mr_number = $(this).find(':selected').data("mr_number");
     var name = $(this).find(':selected').data("name");
+    var cnic = $(this).find(':selected').data("cnic");
     console.log(existing_mr_number,name);
     $('#patient_name').val(name);
+    $('#cnic').val(cnic);
     $('#existing_mr_number').val(existing_mr_number);
 });
 
 $(document).on('change', '#select_mr', function() {
     var phone = $(this).find(':selected').data("phone");
     var name = $(this).find(':selected').data("name");
+    var cnic = $(this).find(':selected').data("cnic");
     
     console.log(phone,name);
     $('#patient_name').val(name);
+    $('#cnic').val(cnic);
     $('#existing_phone').val(phone);
 });
 

@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
 
+            $table->softDeletes();
             $table->foreign('receptionist_id')->references('id')->on('receptionists')->onDelete('cascade');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');

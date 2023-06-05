@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->string('mr_number')->unique();
+            $table->bigInteger('cnic')->unique()->nullable();
             $table->string('name');
             $table->string('gender')->nullable();
             $table->integer('age_years')->nullable();
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->bigInteger('phone');
             $table->string('image')->nullable();
             $table->timestamps();
-
+            $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
         });

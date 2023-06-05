@@ -56,6 +56,7 @@ class PatientController extends Controller
             'mr_number' => $request->mr_number,            
             'name' => $request->name,
             'phone' => $request->phone,
+            'cnic' => $request->cnic,
             'age_years' => $request->age_years,
             'age_months' => $request->age_months,
             'age_weeks' => $request->age_weeks,
@@ -125,8 +126,9 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Patient $patient)
     {
-        //
+        $patient->delete();
+        return back()->with('success', 'Patient has been deleted');
     }
 }

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('to')->nullable();
             $table->bigInteger('price')->nullable();
             $table->timestamps();
-
+            $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
