@@ -2,7 +2,7 @@
     <button type="button" class="btn-toggle-offcanvas"><i class="fa fa-arrow-left"></i></button>
     <div class="sidebar-scroll">
         <div class="user-account">
-            <img src="../assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
+            <img src="../assets/images/logo.jpeg" class="rounded-circle user-photo" alt="User Profile Picture">
             <div class="dropdown">
                 <span>Welcome,</span>
                 <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>{{ Auth::user()->full_name }} <span class="badge badge-primary"> {{ Auth::user()->role_name }}</span></strong></a>
