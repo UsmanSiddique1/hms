@@ -147,11 +147,25 @@
                             
                             
                             
-                            {{-- <div class="col-sm-6" id="image_div">
+                            <div class="col-sm-6" id="address_div">
                                 <div class="form-group">
-                                    <input type="file" name="image" class="dropify">
+                                    <label for="">Address</label>
+                                    <input type="text" name="address" class="form-control">
                                 </div>
-                            </div>  --}}
+                            </div>
+                            <div class="col-sm-6" id="doctor_type_div">
+                                <div class="form-group">
+                                    <label for="">Doctor Type</label>
+                                    <select name="doctor_type" class="form-control" id="">
+                                        <option value="">Select Profession</option>
+                                        <option value="Consultant">Consultant</option>
+                                        <option value="Peads">Peads</option>
+                                        <option value="WMO">WMO</option>
+                                        <option value="MO">MO</option>
+                                        <option value="MS">MS</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-sm-4" id="doctor_div">
                                 <div class="form-group">
                                     <label for="">Add Doctor</label>
@@ -166,7 +180,7 @@
                             <div class="col-sm-4" id="procedure_div">
                                 <div class="form-group">
                                     <label for="">Add Procedure</label>
-                                    <select name="procedure[]" class="form-control select2" onchange="calculateTotal()" id="procedure" multiple="multiple">
+                                    <select name="procedures[]" class="form-control select2" onchange="calculateTotal()" id="procedure" multiple="multiple">
                                         <option value="" disabled>Select Procedure</option>
                                         @foreach($procedures as $procedure)
                                             <option data-price="{{ $procedure->price }}" value="{{ $procedure->id }}">{{ $procedure->name }} (Rs.{{ $procedure->price }})</option>
@@ -190,13 +204,28 @@
                                     <label for="">No. of bed reserved days</label>
                                     <input type="number" name="bed_days" onkeyup="calculateTotal()" class="form-control" placeholder="Days" id="bed_days" value="0" min="0">                                
                                 </div>
-                            </div>                     
+                            </div> 
+                            <div class="col-sm-4 relative">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="W_O" placeholder="W/O">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 relative">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="S_O" placeholder="S/O">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 relative">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="D_O" placeholder="D/O">
+                                </div>
+                            </div>                    
                         </div>
                         <div class="row clearfix">                            
                             
                             <div class="col-sm-12">
                                 <div class="form-group mt-3">
-                                    <textarea rows="4" name="description" class="form-control no-resize" placeholder="Please type what you want..."></textarea>
+                                    <textarea rows="4" name="description" class="form-control no-resize" placeholder="Please add patient history"></textarea>
                                 </div>
                             </div>
                             <div class="col-sm-3">
@@ -221,7 +250,7 @@
 @push('footer-scripts')
 
 <script>
-$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div,#cnic_div').addClass('d-none');
+$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div,#cnic_div, .relative').addClass('d-none');
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
@@ -262,6 +291,7 @@ $('#select_patient').change(function(){
     {
         $('#mr_number').val('');
         $('#mr_div_new, #mr_div_existing,#mr_div_existing_input,#phone_div_existing,#mr_div_new,#phone_div_new').remove();
+        $('.relative').addClass('d-none');
 
         $('#search_patient_div').removeClass('d-none');       
         $('#search_patient').val('');
@@ -283,12 +313,12 @@ $('#select_patient').change(function(){
         $('#mr_number').val('');
         var new_mr = `<div class="form-group" id="mr_div_new">    
                 <label for="">MR Number</label>
-                <input type="text" class="form-control" name="mr_number" id="mr_number" data-new_mr="{{ $new_mr }}" value="{{ $new_mr }}" placeholder="MR#" required="">                                
+                <input type="text" class="form-control" name="mr_number" id="mr_number" data-new_mr="{{ $new_mr }}" value="{{ $new_mr }}" placeholder="MR#" readonly required="">                                
             </div>`
         
         $('#mr_number_div').append(new_mr);
         
-        $('#gender_div, #image_div, #age_div,#name_div,#cnic_div').removeClass('d-none');
+        $('#gender_div, #image_div, #age_div,#name_div,#cnic_div,#address_div,.relative').removeClass('d-none');
         
     }
 });
@@ -328,14 +358,15 @@ $('#search_patient').change(function(){
         $('#gender_div, #image_div, #age_div, #phone_div_existing').addClass('d-none');
         var existing_patient =`<div class="form-group" id="phone_div_existing">
                                     <label for="">Phone</label>
-                                    <select name="phone" class="form-control select2" id="select_phone">
+                                    <select name="phone" class="form-control select2 select_phone_mr" id="select_phone">
                                         <option value="">Select Phone</option>
                                         @foreach($patients as $patient)
                                             <option value="{{ $patient->id }}" 
                                                 data-mr_number="{{ $patient->mr_number }}"
                                                 data-name="{{ $patient->name }}"
                                                 data-cnic="{{ $patient->cnic }}"
-                                                >{{ $patient->phone }}</option>
+                                                data-phone="{{ $patient->phone }}"
+                                                >{{ $patient->phone }} - {{ $patient->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>`;
@@ -346,7 +377,9 @@ $('#search_patient').change(function(){
 
         var existing_mr = `<div class="form-group" id="mr_div_existing_input">    
                 <label for="">MR Number</label>
-                <input type="text" class="form-control" name="mr_number" id="existing_mr_number" placeholder="MR#" required="">                                
+                <select name="mr_number" id="get_mr_numbers" class="form-control">
+
+                </select>
             </div>`
         
         $('#mr_number_div').append(existing_mr);
@@ -356,6 +389,15 @@ $('#search_patient').change(function(){
 
     }
 });
+
+
+// $('.select_phone_mr').change(function(){
+//     var phone = $(this).val();
+//     console.log(phone);
+//     $.get('/get_mr_numers/'+phone, function(response){
+//         console.log(response);
+//     });
+// });
 
 
 $('#procedure').change(function(){
@@ -391,6 +433,18 @@ $(document).on('change', '#select_phone', function() {
     var existing_mr_number = $(this).find(':selected').data("mr_number");
     var name = $(this).find(':selected').data("name");
     var cnic = $(this).find(':selected').data("cnic");
+    var phone = $(this).find(':selected').data("phone");
+    console.log(phone);
+    $.get('/get_mr_numers/'+phone, function(response){
+        console.log(response);
+
+        $('#get_mr_numbers').empty();
+    
+        $.each(response.data, function(index,patient){
+            console.log(patient);
+            $('#get_mr_numbers').append('<option value="' + patient.mr_number + '">' + patient.mr_number + '</option>');
+        })
+    });
     console.log(existing_mr_number,name);
     $('#patient_name').val(name);
     $('#cnic').val(cnic);

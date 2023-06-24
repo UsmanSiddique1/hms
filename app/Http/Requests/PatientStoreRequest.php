@@ -25,7 +25,7 @@ class PatientStoreRequest extends FormRequest
     {
         return [
             'mr_number' => 'required|unique:patients',
-            'phone' => 'required|unique:patients',
+            'phone' => 'required',
             'name' => 'required'
         ];
     }

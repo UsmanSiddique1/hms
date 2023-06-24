@@ -84,6 +84,21 @@
                             </div>                            
                             <div class="col-sm-4">
                                 <div class="form-group">
+                                    <input type="text" class="form-control" name="W_O" placeholder="W/O">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="S_O" placeholder="S/O">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="D_O" placeholder="D/O">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
                                     <input type="text" class="form-control" name="email" placeholder="Enter Your Email">
                                 </div>
                             </div>

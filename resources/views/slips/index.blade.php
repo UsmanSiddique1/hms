@@ -59,8 +59,15 @@
                                     <td>{{ $slip->doctor ? $slip->doctor->user->f_name : '--' }}</td>
                                     <td><span class="badge {{ $slip->type == 'Emergency' ? 'badge-danger' : 'badge-primary' }}">{{ $slip->type }}</span></td>
                                     <td>Rs.{{ $slip->total_amount }}</td>
-                                    <td><a href="{{ route('slips.show', $slip->id) }}" target="_blank" class="btn btn-primary"> View</a></td>
-                                    
+                                    <td>
+                                        <a href="{{ route('slips.show', $slip->id) }}" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                        <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-primary edit-patient"><i class="fa fa-pencil"></i></a>
+                                        
+                                          </button>
+                                          <a href="javascript:void(0)" class="delete btn btn-danger" 
+                                          data-id="{{ $slip->id }}"
+                                            ><i class="fa fa-trash"></i></a>
+                                    </td>
                                 </tr>
                                 @endforeach
                                 

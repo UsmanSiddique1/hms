@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\ReferenceCount;
 use App\Http\Requests\PatientStoreRequest;
+use DB;
 
 class PatientController extends Controller
 {
@@ -41,30 +42,47 @@ class PatientController extends Controller
      */
     public function store(PatientStoreRequest $request)
     {
+        try {
 
-        $imageUrl = 'dummy-user.jpg';
+            $imageUrl = 'dummy-user.jpg';
         
-        if (!empty($request->image)) {
-            $file =$request->file('image');
-            $extension = $file->getClientOriginalExtension(); 
-            $filename = time().'.' . $extension;
-            $file->move(public_path('uploads/patients'), $filename);
-            $imageUrl = 'public/uploads/patients'.$filename;
+            if (!empty($request->image)) {
+                $file =$request->file('image');
+                $extension = $file->getClientOriginalExtension(); 
+                $filename = time().'.' . $extension;
+                $file->move(public_path('uploads/patients'), $filename);
+                $imageUrl = 'public/uploads/patients'.$filename;
+            }
+
+            DB::beginTransaction();
+
+            Patient::create([
+                'mr_number' => $request->mr_number,            
+                'name' => $request->name,
+                'W_O' => $request->get('W_O'),
+                'S_O' => $request->get('S_O'),
+                'D_O' => $request->get('D_O'),
+                'phone' => $request->phone,
+                'cnic' => $request->cnic,
+                'age_years' => $request->age_years,
+                'age_months' => $request->age_months,
+                'age_weeks' => $request->age_weeks,
+                'gender' => $request->gender,
+                'image' => $imageUrl,
+            ]);
+
+            ReferenceCount::where('type', 'mr')->increment('count',1);
+
+
+            DB::commit();
+            return redirect('/patients')->with('success', 'Patient has been added');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', 'Something went wrong '. $th->getLine() . $th->getMessage());
         }
+        
 
-        Patient::create([
-            'mr_number' => $request->mr_number,            
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'cnic' => $request->cnic,
-            'age_years' => $request->age_years,
-            'age_months' => $request->age_months,
-            'age_weeks' => $request->age_weeks,
-            'gender' => $request->gender,
-            'image' => $imageUrl,
-        ]);
-
-        return redirect('/patients')->with('success', 'Patient has been added');
     }
 
     /**

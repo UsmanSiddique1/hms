@@ -42,7 +42,8 @@ Route::group(['middleware'=> ['auth']], function(){
         Route::resource('/receptionists', ReceptionistController::class);
     });
     
-    
+    // Get MR Numbers by phone
+    Route::get('/get_mr_numers/{phone}', [SlipController::class, 'getMrNumbers']);
 });
 
 

@@ -41,7 +41,7 @@
             <tr>
                 <td colspan="2">Pt. Name: {{ $slip->patient->name }}</td>
                 
-                <td colspan="2">W/O:</td>
+                <td colspan="2">{{ $slip->patient->W_O ? 'W/O: ' .$slip->patient->W_O : ($slip->patient->D_O ? 'D/O: '. $slip->patient->D_O : ($slip->patient->S_O ? 'S/O: '.  $slip->patient->S_O : ''))}}</td>
                 
                 <td>BP:</td>
             </tr>
@@ -55,7 +55,7 @@
             <tr>
                 <td colspan="2" rowspan="3">Presenting Complaint &<br>Relevent History</td>
                 
-                <td colspan="2" rowspan="3">Address</td>
+                <td colspan="2" rowspan="3">Address: {{ $slip->patient->address}}</td>
             
                 <td>Temp:</td>
             </tr>
@@ -75,17 +75,35 @@
                 
                 <td>Spo2:</td>
             </tr>
-    
+            <tr>
+                <td colspan="2" rowspan="2">Patient History: {{ $slip->description }}</td>
+                <td colspan="2">Procedures:
+                                    @foreach($slip->procedures as $item)
+                                    {{ $item->name }},
+                                    @endforeach
+                                </td>
+                <td>Doctor_type: {{$slip->doctor_type}}</td>
+
+            </tr>
+            <tr>
+                
+            </tr>
             <tr>
                 <td colspan="2">Physician: Dr. {{ $slip->doctor ? $slip->doctor->user->full_name : '-' }}</td>
                 
-                <td colspan="2">Fee Paid: {{ $slip->total_amount }}</td>
+                <td colspan="2">Fee Paid: Rs.{{ $slip->total_amount }}</td>
                 
                 <td>Advice By Dr: </td>
             </tr>
+            
     
     
         </table>
+
+        <div style="display:flex; justify-content:space-between;margin-top:20px;">
+            <p>Doctor Sign ___________</p>
+            <p>Receptionist Sign ___________</p>
+        </div>
     </div>
 	
 

@@ -20,19 +20,19 @@ class Doctor extends Model
         'to'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::deleting(function ($doctor) {
-            $doctor->user()->delete();
-            foreach($doctor->slips as $slip)
-            {
-                $slip->delete();
-            }
+    //     static::deleting(function ($doctor) {
+    //         $doctor->user()->delete();
+    //         foreach($doctor->slips as $slip)
+    //         {
+    //             $slip->delete();
+    //         }
             
-        });
-    }
+    //     });
+    // }
 
     public function user()
     {

@@ -20,7 +20,8 @@ class Slip extends Model
         'total_amount',
         'remaining_amount',
         'description',
-        'slip_number'
+        'slip_number',
+        'doctor_type',
     ];
 
     public function doctor()
@@ -43,9 +44,19 @@ class Slip extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function receptionist()
+    {
+        return $this->belongsTo(Receptionist::class);
+    }
+
+    // public function procedures()
+    // {
+    //     return $this->hasMany(SlipProcedure::class);
+    // }
+
     public function procedures()
     {
-        return $this->hasMany(SlipProcedure::class);
+        return $this->belongsToMany(Procedure::class, 'slip_procedures', 'slip_id', 'procedure_id')->withPivot('price');
     }
 
 }
