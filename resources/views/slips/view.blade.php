@@ -28,6 +28,15 @@
             #goback {
                 display: none;
             }
+            @page {
+                size: auto;  /* Set the page size to auto to remove the URL header */
+                margin-top: 0;  /* Set the top margin to 0 to remove any extra space */
+            }
+
+            /* Hide the header section that includes the URL */
+            @page :first {
+                header: none;
+            }
         }
 
         #goback a{
