@@ -26,27 +26,27 @@ class Slip extends Model
 
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->belongsTo(Doctor::class)->withTrashed();
     }
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(Patient::class)->withTrashed();
     }
 
     public function bed()
     {
-        return $this->belongsTo(Bed::class);
+        return $this->belongsTo(Bed::class)->withTrashed();
     }
 
     public function department()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class)->withTrashed();
     }
 
     public function receptionist()
     {
-        return $this->belongsTo(Receptionist::class);
+        return $this->belongsTo(Receptionist::class)->withTrashed();
     }
 
     // public function procedures()
@@ -56,7 +56,7 @@ class Slip extends Model
 
     public function procedures()
     {
-        return $this->belongsToMany(Procedure::class, 'slip_procedures', 'slip_id', 'procedure_id')->withPivot('price');
+        return $this->belongsToMany(Procedure::class, 'slip_procedures', 'slip_id', 'procedure_id')->withPivot('price')->withTrashed();
     }
 
 }

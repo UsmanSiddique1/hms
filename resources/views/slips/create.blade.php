@@ -303,8 +303,8 @@ $('#select_patient').change(function(){
         $('#search_patient_div,#name_div').addClass('d-none');
         $('#phone_div_existing,#phone_div_new,#phone_div_new').remove();
         var new_patient = `<div class="form-group" id="phone_div_new">    
-                <label for="">Phone</label>
-                <input type="number" name="phone" class="form-control" placeholder="Phone">                                
+                <label for="">Phone *</label>
+                <input type="number" name="phone" class="form-control" placeholder="Phone" required>                                
             </div>`
         
         $('#phone_div').append(new_patient);
@@ -343,8 +343,8 @@ $('#search_patient').change(function(){
         $('#mr_number_div').append(existing_mr);
 
         var exiting_patient_phone = `<div class="form-group" id="phone_div_new">    
-                <label for="">Phone</label>
-                <input type="number" name="phone" class="form-control" id="existing_phone" placeholder="Phone">                                
+                <label for="">Phone *</label>
+                <input type="number" name="phone" class="form-control" id="existing_phone" placeholder="Phone" required>                                
             </div>`
         
         $('#phone_div').append(exiting_patient_phone); 

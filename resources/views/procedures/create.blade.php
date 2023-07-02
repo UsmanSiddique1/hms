@@ -37,13 +37,13 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="name" placeholder="name">
+                                    <input type="text" class="form-control" name="name" placeholder="name" required>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input type="number" class="form-control" name="price" placeholder="Price ">
+                                    <input type="number" class="form-control" name="price" placeholder="Price" required>
                                 </div>
                             </div>
                             

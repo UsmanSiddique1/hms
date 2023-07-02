@@ -16,19 +16,37 @@
         .header{
             text-align: center;
         }
-
-        
+        #goback {
+            margin-top: 10px;
+            display: block;
+        }
+                
         @media print {
             table{
                 border:1px solid black;
             }
+            #goback {
+                display: none;
+            }
         }
+
+        #goback a{
+            background: skyblue;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+        }
+
+
 
     </style>
 </head>
 <body>
 
     <div class="container">
+    <div id="goback">
+        <a href="{{ url()->previous() }}">Go Back</a>
+    </div>
         <h1 class="header">Ejaz Sikandar Memorial Hospital Kangan Pur</h1>
         <table border="1px solid black">
             <tr>

@@ -1,4 +1,8 @@
 @extends('layouts.master')
+@push('header-scripts')
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+@endpush
 @section('content')
 <div class="container-fluid">
     <div class="block-header">
@@ -45,6 +49,8 @@
                                     <th>Doctor Name</th>
                                     <th>Slip Type</th>
                                     <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
                                     <th>Action</th>
                                     
                                 </tr>
@@ -59,13 +65,15 @@
                                     <td>{{ $slip->doctor ? $slip->doctor->user->f_name : '--' }}</td>
                                     <td><span class="badge {{ $slip->type == 'Emergency' ? 'badge-danger' : 'badge-primary' }}">{{ $slip->type }}</span></td>
                                     <td>Rs.{{ $slip->total_amount }}</td>
+                                    <td>{{ $slip->created_at->format('d-M-Y') }}</td>
+                                    <td>{{ $slip->created_at->format('h:i a') }}</td>
                                     <td>
                                         <a href="{{ route('slips.show', $slip->id) }}" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                         <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-primary edit-patient"><i class="fa fa-pencil"></i></a>
                                         
-                                          </button>
-                                          <a href="javascript:void(0)" class="delete btn btn-danger" 
+                                        <a href="javascript:void(0)" class="delete btn btn-danger" 
                                           data-id="{{ $slip->id }}"
+                                          data-slip_number="{{ $slip->slip_number }}"
                                             ><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
@@ -80,4 +88,39 @@
     </div>
 
 </div>
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Slip <strong>"<span id="slip_number"></span>"</strong> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="deleteForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('DELETE')
+            <div class="modal-body"> 
+                <strong>Alert!</strong> This Action will not be UNDO.
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">DELETE NOW</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+@push('footer-scripts')
+<script>
+    $('.delete').click(function(){
+        var id = $(this).data('id');
+        $('#slip_number').text($(this).data('slip_number'));
+        $('#deleteForm').attr('action',"{{ url('slips') }}/"+id);
+        $('#deleteModel').modal().show();
+    });
+</script>
+
+@endpush
 @endsection

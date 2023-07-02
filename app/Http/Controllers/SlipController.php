@@ -262,9 +262,10 @@ class SlipController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Slip $slip)
     {
-        //
+        $slip->delete();
+        return back()->with('success', 'Slip has been deleted');
     }
 
     public function getMrNumbers($phone)
