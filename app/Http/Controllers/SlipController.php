@@ -26,7 +26,7 @@ class SlipController extends Controller
      */
     public function index()
     {
-        $slips = Slip::all();
+        $slips = Slip::orderBy('slip_number')->get();
         return view('slips.index', compact('slips'));
     }
 
@@ -38,7 +38,8 @@ class SlipController extends Controller
     public function create()
     {
         $ref_mr_count = ReferenceCount::where('type', 'mr')->first();
-        $new_mr = 'MR#'.$ref_mr_count->count + 1;         
+        $new_mr = 'MR#'.$ref_mr_count->count + 1;        
+
         $ref_slip_count = ReferenceCount::where('type', 'slip')->first();
         $new_slip = $ref_slip_count->count + 1; 
 
@@ -97,8 +98,11 @@ class SlipController extends Controller
                     'S_O' => $request->get('S_O'),
                     'D_O' => $request->get('D_O'),
                 ]);
-            }      
-            
+
+                $ref_count = ReferenceCount::where('type', 'mr')->first();
+                $ref_count->count = $ref_count->count + 1;
+                $ref_count->update();
+            }        
            
             $slip_number_count = ReferenceCount::where('type', 'slip')->first();
             $slip_number_count->count = $slip_number_count->count + 1;
@@ -145,12 +149,7 @@ class SlipController extends Controller
                 }
     
                 $slip->procedures()->sync($syncData);
-            }
-            
-    
-            $ref_count = ReferenceCount::where('type', 'mr')->first();
-            $ref_count->count = $ref_count->count + 1;
-            $ref_count->update();
+            }           
 
             DB::commit();
 
