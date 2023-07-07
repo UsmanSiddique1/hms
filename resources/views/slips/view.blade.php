@@ -60,7 +60,7 @@
         <table border="1px solid black">
             <tr>
                 <td>MR No: {{ $slip->patient->mr_number }}</td>
-                <td>Bill No: {{ $slip->slip_number }}</td>
+                <td>Bill No: Slip#{{ $slip->slip_number }}</td>
                 <td>Time: {{ $slip->created_at->format('h:i A') }}</td>
                 <td>Date: {{ $slip->created_at->format('d-M-Y') }}</td>
                 <td>CNIC: {{ $slip->patient->cnic }}</td>
