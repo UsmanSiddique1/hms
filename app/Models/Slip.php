@@ -59,4 +59,9 @@ class Slip extends Model
         return $this->belongsToMany(Procedure::class, 'slip_procedures', 'slip_id', 'procedure_id')->withPivot('price');
     }
 
+    public function getSlipNumberAttribute($value)
+    {
+        return (int) filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
 }
