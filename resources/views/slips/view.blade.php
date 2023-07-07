@@ -16,19 +16,46 @@
         .header{
             text-align: center;
         }
-
-        
+        #goback {
+            margin-top: 10px;
+            display: block;
+        }
+                
         @media print {
             table{
                 border:1px solid black;
             }
+            #goback {
+                display: none;
+            }
+            @page {
+                size: auto;  /* Set the page size to auto to remove the URL header */
+                margin-top: 0;  /* Set the top margin to 0 to remove any extra space */
+            }
+
+            /* Hide the header section that includes the URL */
+            @page :first {
+                header: none;
+            }
         }
+
+        #goback a{
+            background: skyblue;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+        }
+
+
 
     </style>
 </head>
 <body>
 
     <div class="container">
+    <div id="goback">
+        <a href="{{ url()->previous() }}">Go Back</a>
+    </div>
         <h1 class="header">Ejaz Sikandar Memorial Hospital Kangan Pur</h1>
         <table border="1px solid black">
             <tr>
@@ -106,6 +133,8 @@
         </div>
     </div>
 	
+
+
 
 </body>
 </html>
