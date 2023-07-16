@@ -42,49 +42,62 @@ class DoctorController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        $request->validate([
-            'f_name' => 'required',
-            'l_name' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
-            'speciality' => 'required',
-        ]);
+        try {
+            
+            $request->validate([
+                'f_name' => 'required',
+                'l_name' => 'required',
+                'phone' => 'required',
+                'email' => 'required',
+                'speciality' => 'required',
+            ]);
+    
+            $imageUrl = 'dummy-image.jpg';
+    
+            if (!empty($request->image)) {
+                $file =$request->file('image');
+                $extension = $file->getClientOriginalExtension(); 
+                $filename = time().'.' . $extension;
+                $file->move(public_path('uploads/doctors'), $filename);
+                $imageUrl = 'public/uploads/doctors'.$filename;
+            }
+    
+            DB::beginTransaction();
 
-        $imageUrl = 'dummy-image.jpg';
+            $user = User::create([
+                'f_name' => $request->f_name,
+                'l_name' => $request->l_name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'dob' => $request->dob,
+                'image' => $imageUrl,
+                'gender' => $request->gender,
+                'role_id' => 2,
+                'password' => bcrypt('password')
+            ]);
+            $days = json_encode($request->days);
+    
+            Doctor::create([
+                'user_id' => $user->id,
+                'department_id' => $request->department,
+                'description' => $request->description,
+                'speciality' => $request->speciality,
+                'price' => $request->price,
+                'days' => $days,
+                'from' => $request->from,
+                'to' => $request->to
+            ]);
 
-        if (!empty($request->image)) {
-            $file =$request->file('image');
-            $extension = $file->getClientOriginalExtension(); 
-            $filename = time().'.' . $extension;
-            $file->move(public_path('uploads/doctors'), $filename);
-            $imageUrl = 'public/uploads/doctors'.$filename;
+            DB::commit();
+
+            return redirect('/doctors')->with('success', 'Doctor has been added');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', 'something went wrong '.$th->getLine(). " ".$th->getMessage());
         }
+        
 
-        $user = User::create([
-            'f_name' => $request->f_name,
-            'l_name' => $request->l_name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'dob' => $request->dob,
-            'image' => $imageUrl,
-            'gender' => $request->gender,
-            'role_id' => 2,
-            'password' => bcrypt('password')
-        ]);
-        $days = json_encode($request->days);
-
-        Doctor::create([
-            'user_id' => $user->id,
-            'department_id' => $request->department,
-            'description' => $request->description,
-            'speciality' => $request->speciality,
-            'price' => $request->price,
-            'days' => $days,
-            'from' => $request->from,
-            'to' => $request->to
-        ]);
-
-        return redirect('/doctors')->with('success', 'Doctor has been added');
     }
 
     /**
@@ -155,10 +168,6 @@ class DoctorController extends Controller
             // 'from' => $request->from,
             // 'to' => $request->to
         ]);
-
-
-
-
 
         DB::commit();
 
