@@ -21,23 +21,28 @@ class Patient extends Model
         'cnic',
         'age_years',
         'age_months',
-        'age_weeks',
+        'age_days',
         'gender',
         'image'
     ];
 
-    protected static function boot()
+    public function getPhoneAttribute($value)
     {
-        parent::boot();
-
-        static::deleting(function ($patient) {
-            foreach($patient->slips as $slip)
-            {
-                $slip->delete();
-            }
-            
-        });
+        return '0' . $value;
     }
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::deleting(function ($patient) {
+    //         foreach($patient->slips as $slip)
+    //         {
+    //             $slip->delete();
+    //         }
+            
+    //     });
+    // }
 
     public function slips()
     {

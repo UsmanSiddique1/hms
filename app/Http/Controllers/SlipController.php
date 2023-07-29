@@ -120,6 +120,8 @@ class SlipController extends Controller
                 'type' => $request->type,
                 'description' => $request->description,
                 'total_amount' => $request->total_amount,
+                'grand_total' => $request->grand_total,
+                'discount' => $request->discount,
                 'doctor_type' => $request->doctor_type,
                 'remaining_amount' => 0    
             ]);
@@ -227,6 +229,8 @@ class SlipController extends Controller
                 'doctor_id' => $request->doctor,
                 'description' => $request->description,
                 'total_amount' => $request->total_amount,
+                'grand_total' => $request->grand_total,
+                'discount' => $request->discount,
                 'doctor_type' => $request->doctor_type,
                 'remaining_amount' => 0    
             ]);

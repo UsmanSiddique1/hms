@@ -122,8 +122,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Age(Weeks)</label>
-                                            <input type="number" class="form-control" id="patient_name" name="age_weeks" placeholder="Weeks">
+                                            <label for="">Age(Days)</label>
+                                            <input type="number" class="form-control" id="patient_name" name="age_days" placeholder="Days">
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +233,19 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
+                                    <label for="">Total</label>
                                     <input class="form-control" name="total_amount" id="total_amount" placeholder="Total" readonly required min="1">
+                                </div>
+                            </div>                            
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Discount</label>
+                                    <input class="form-control" onkeyup="calculateTotal()" name="discount" id="discount" placeholder="Discount" min="1">
+                                </div>
+                            </div><div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Grand Total</label>
+                                    <input class="form-control" name="grand_total" id="grand_total" placeholder="Grand" readonly required min="1">
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -520,8 +532,23 @@ $(document).on('change', '#select_mr', function() {
             console.log(total);
         }
         
-        $('#total_amount').val(total);
-        document.getElementById("total_amount").textContent = total.toFixed(2);
+        // Get the discount value from the input field
+        var discount = parseFloat(document.getElementById("discount").value) || 0;
+
+        if(total < discount)
+        {
+            $('#discount').val() = 0;
+        }
+        // Calculate grand_total by subtracting discount from total
+        var grand_total = total - discount;
+
+        
+        // Update the total_amount and grand_total input fields
+        $('#total_amount').val(total.toFixed(2));
+        $('#grand_total').val(grand_total.toFixed(2));
+
+        // $('#total_amount').val(total);
+        // document.getElementById("total_amount").textContent = total.toFixed(2);
     }
 </script>
 @endpush

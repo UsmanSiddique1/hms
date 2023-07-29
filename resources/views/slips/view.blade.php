@@ -73,7 +73,7 @@
                 <td>BP:</td>
             </tr>
             <tr>
-                <td>Age: {{ $slip->patient->age_years }}y, {{ $slip->patient->age_months }}m, {{ $slip->patient->age_weeks }}w</td>
+                <td>Age: {{ $slip->patient->age_years }}y, {{ $slip->patient->age_months }}m, {{ $slip->patient->age_days }}d</td>
                 <td>Gender: {{ $slip->patient->gender }}</td>
                 <td colspan="2">Contact: {{ $slip->patient->phone }}</td>
                 <td>Weight</td>
@@ -118,7 +118,7 @@
             <tr>
                 <td colspan="2">Physician: Dr. {{ $slip->doctor ? $slip->doctor->user->full_name : '-' }}</td>
                 
-                <td colspan="2">Fee Paid: Rs.{{ $slip->total_amount }}</td>
+                <td colspan="2">Fee Paid: Rs.{{ $slip->grand_total }} {{ $slip->discount > 0 ? 'Discount: Rs'. $slip->discount : '' }}</td>
                 
                 <td>Advice By Dr: </td>
             </tr>
