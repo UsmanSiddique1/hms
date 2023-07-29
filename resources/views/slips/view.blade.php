@@ -84,7 +84,7 @@
                 
                 <td colspan="2" rowspan="3">Address: {{ $slip->patient->address}}</td>
             
-                <td>Temp:</td>
+                <td>Temp: </td>
             </tr>
     
             <tr>
