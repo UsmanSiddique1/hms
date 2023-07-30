@@ -172,7 +172,7 @@
                             <div class="col-sm-4" id="doctor_div">
                                 <div class="form-group">
                                     <label for="">Add Doctor</label>
-                                    <select name="doctor" onchange="calculateTotal()" class="form-control show-tick select2" id="doctor">
+                                    <select name="doctor" onchange="calculateTotal()" class="form-control show-tick" id="doctor">
                                         <option value="">Doctor</option>
                                         @foreach($doctors as $doctor)
                                             <option data-price="{{ $doctor->price }}" value="{{ $doctor->id }}">{{ $doctor->user->full_name }} - ({{ $doctor->speciality }})</option>
@@ -269,12 +269,14 @@ $('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div,
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
+    $('#doctor').attr('onchange', 'calculateTotal()');
     if(type == 'Emergency')
     {
-
-        $('#procedure_div').removeClass('d-none');
+        $('#total_amount').val(0);
+        $('#doctor').removeAttr('onchange');
+        $('#procedure_div,#doctor_div').removeClass('d-none');
         $('#procedure').attr("required","required");
-        $('#doctor_div, #bed_div, #bed_days_div').addClass('d-none');
+        $('#bed_div, #bed_days_div').addClass('d-none');
     }
     if(type == 'OPD')
     {

@@ -57,6 +57,7 @@
         <a href="{{ url()->previous() }}">Go Back</a>
     </div>
         <h1 class="header">Ejaz Sikandar Memorial Hospital Kangan Pur</h1>
+        <h5>{{$slip->type}}</h5>
         <table border="1px solid black">
             <tr>
                 <td>MR No: {{ $slip->patient->mr_number }}</td>
