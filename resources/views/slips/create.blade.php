@@ -240,7 +240,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="">Discount</label>
-                                    <input class="form-control" onkeyup="calculateTotal()" name="discount" id="discount" placeholder="Discount" min="1">
+                                    <input class="form-control" onkeyup="calculateTotal()" name="discount" id="discount" value="0" placeholder="Discount" min="1">
                                 </div>
                             </div><div class="col-sm-3">
                                 <div class="form-group">

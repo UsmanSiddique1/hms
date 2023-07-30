@@ -13,7 +13,7 @@ use App\Models\Slip;
 use App\Models\SlipProcedure;
 use App\Models\Receptionist;
 use Auth;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 
@@ -62,12 +62,18 @@ class SlipController extends Controller
     {                
         try {
 
+            Log::info("Start Creating Slip Request: ");
+            Log::info($request->all());
             DB::beginTransaction();
 
+            Log::info("Validating Request");
             $request->validate([
                 'mr_number' => 'required',
                 'type' => 'required'
             ]);
+
+            Log::info("Request Validated: ");
+            Log::info($request->all());
             
             $imageUrl = 'dummy-image.jpg';
 
@@ -78,8 +84,10 @@ class SlipController extends Controller
                 $file->move(public_path('uploads/patients'), $filename);
                 $imageUrl = 'public/uploads/patients'.$filename;
             }           
-
+            
+            Log::info("MR Number: ".$request->mr_number);
             $patient = Patient::where('mr_number', $request->mr_number)->first();
+            Log::info("Existing Patient: ".$patient);
             
             if(!$patient)
             {
@@ -102,13 +110,17 @@ class SlipController extends Controller
                 $ref_count = ReferenceCount::where('type', 'mr')->first();
                 $ref_count->count = $ref_count->count + 1;
                 $ref_count->update();
-            }        
-           
+                Log::info("New Patient: ".$patient);
+            }     
+
             $slip_number_count = ReferenceCount::where('type', 'slip')->first();
             $slip_number_count->count = $slip_number_count->count + 1;
             $slip_number_count->update();
+            Log::info("Slip Number Count: ".$slip_number_count->count);           
             
             $slip_number = 'Slip#'. $slip_number_count->count;
+            Log::info("Slip Number: ".$slip_number);           
+
             $receptionist_id = $request->receptionist_id != '' ? $request->receptionist_id : Auth::user()->receptionist->id;
             $slip = Slip::create([
                 'slip_number' => $slip_number,
@@ -121,26 +133,18 @@ class SlipController extends Controller
                 'description' => $request->description,
                 'total_amount' => $request->total_amount,
                 'grand_total' => $request->grand_total,
-                'discount' => $request->discount,
+                'discount' => $request->discount ?? 0,
                 'doctor_type' => $request->doctor_type,
                 'remaining_amount' => 0    
             ]);
 
-            // if(isset($request->procedure) && count($request->procedure) > 0)
-            // {
-            //     foreach($request->procedure as $item => $v)
-            //     {
-            //         $procedure = Procedure::find($request->procedure[$item]);
-            //         SlipProcedure::create([
-            //             'slip_id' => $slip->id,
-            //             'procedure_id' => $procedure->id,
-            //             'price' => $procedure->price
-            //         ]);
-            //     }
-            // }
+            Log::info("Slip Generated: ".$slip);
             
             if(isset($request->procedures) && count($request->procedures) > 0)
             {
+                Log::info("Procedures IDs ");           
+                Log::info($request->procedures);           
+
                 $procedureIds = $request->procedures;
                 $procedures = Procedure::whereIn('id', $procedureIds)->get();
     
@@ -149,17 +153,19 @@ class SlipController extends Controller
                 foreach ($procedures as $procedure) {
                     $syncData[$procedure->id] = ['price' => $procedure->price];
                 }
-    
+
+                Log::info("Syncing Procedures ID's");                
                 $slip->procedures()->sync($syncData);
             }           
 
             DB::commit();
+            Log::info("Function Closed");                
 
 
         } catch (\Throwable $e) {
 
             DB::rollBack();
-
+            Log::info("Error in slip store: ".$e->getLine() . " ".$e->getMessage(). "Full Error Log: ".$e);
             return back()->with('error', $e);
             
         }      
