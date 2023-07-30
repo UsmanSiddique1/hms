@@ -19,10 +19,7 @@ yarn-error.log
 /.idea
 /.vscode
 public/vendor/log-viewer/mix-manifest.json
-public/vendor/log-viewer/mix-manifest.json
 public/vendor/log-viewer/img/log-viewer-64.png
-public/vendor/log-viewer/mix-manifest.json
-public/vendor/log-viewer/img/log-viewer-128.png
 public/vendor/log-viewer/img/log-viewer-32.png
 public/vendor/log-viewer/img/log-viewer-128.png
 public/vendor/log-viewer/app.js.LICENSE.txt
