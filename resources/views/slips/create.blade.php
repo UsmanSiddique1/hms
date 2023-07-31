@@ -36,10 +36,17 @@
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="header">
-                    <h2><strong>Slip#{{ $new_slip }}</strong>  <small>{{ now()->format('d-M-Y h:i A') }}</small> </h2>                            
+                    <h2><strong>Slip#{{ $new_slip }}</strong>  <small>{{ now()->format('d-M-Y h:i A') }}</small> </h2>       
+                                      
                 </div>
                 <form action="{{ route('slips.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <div class="form-group">
+                        <select name="processing" id="processing">
+                            <option value="general" selected>General Slip</option>
+                            <option value="cross_match">Cross Match Slip</option>
+                        </select>
+                    </div>   
                     <div class="body">
                         @if(Session::has('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -190,7 +197,45 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>  
+                            </div> 
+                            <div class="row" id="doner_row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">Donor Name *</label>
+                                        <input type="text" class="form-control" id="donor_name" name="donor_name" placeholder="Patient Name" value="{{ old('donor_name') }}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" id="donor_cnic_div">
+                                    <div class="form-group">
+                                        <label for="">Donor cnic</label>
+                                        <input type="number" name="donor_cnic" class="form-control" id="donor_cnic">
+                                    </div>
+                                </div>                     
+                                <div class="col-sm-3" id="donor_address_div">
+                                    <div class="form-group">
+                                        <label for="">Donor address</label>
+                                        <input type="text" name="donor_address" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">Donor Age(Years)</label>
+                                        <input type="number" class="form-control" id="donor_age" name="donor_age" placeholder="Donor Age">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" id="donor_phone">    
+                                        <label for="">Donor Phone *</label>
+                                        <input type="number" name="donor_phone" class="form-control" placeholder="Doner Phone">                                
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="">Relation *</label>
+                                        <input type="text" class="form-control" name="donor_S_O" placeholder="Doner S/O">
+                                    </div>
+                                </div>
+                            </div> 
                             <div class="col-sm-4" id="bed_div">
                                 <div class="form-group">
                                     <label for="">Add Bed</label>
@@ -265,7 +310,7 @@
 @push('footer-scripts')
 
 <script>
-$('#doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div,#cnic_div, .relative').addClass('d-none');
+$('#doner_row, #doctor_div, #procedure_div, #bed_div,#bed_days_div, #gender_div, #image_div, #age_div,#search_patient_div, #name_div,#cnic_div, .relative').addClass('d-none');
 $('#total_amount').val(0);
 $('#type').change(function(){
     var type = $(this).val();
@@ -294,6 +339,10 @@ $('#type').change(function(){
         $('#procedure_div').removeAttr("required")
 
     }
+});
+
+$('#processing').change(function(){
+    $('#doner_row').toggleClass('d-none', $(this).val() !== 'cross_match');
 });
 
 function refreshSelect2()

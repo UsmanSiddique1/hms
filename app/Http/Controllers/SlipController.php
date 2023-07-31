@@ -12,6 +12,7 @@ use App\Models\Bed;
 use App\Models\Slip;
 use App\Models\SlipProcedure;
 use App\Models\Receptionist;
+use App\Services\DonorService;
 use Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -19,11 +20,14 @@ use Illuminate\Support\Facades\DB;
 
 class SlipController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    protected $donorService;
+
+    public function __construct(DonorService $donorService)
+    {
+        return $this->donorService = $donorService;
+    }
+    
     public function index()
     {
         $slips = Slip::orderBy('slip_number')->get();
@@ -62,9 +66,21 @@ class SlipController extends Controller
     {                
         try {
 
-            Log::info("Start Creating Slip Request: ");
+            Log::info("Start Creating Slip Request");
             Log::info($request->all());
             DB::beginTransaction();
+
+            $donor = null;
+            if($request->processing == 'cross_match')
+            {
+                Log::info("Start Creating Cross Match Slip");
+                Log::info("Validating Cross Match Request");
+                $request->validate([
+                    'donor_cnic' => 'required',
+                    'donor_name' => 'required'
+                ]);        
+                $donor = $this->donorService->updateOrCreate($request);
+            }
 
             Log::info("Validating Request");
             $request->validate([
@@ -125,6 +141,7 @@ class SlipController extends Controller
             $slip = Slip::create([
                 'slip_number' => $slip_number,
                 'patient_id' => $patient->id,
+                'donor_id' => $donor != null ? $donor->id : null,
                 'department_id' => $request->department,
                 'receptionist_id' => $receptionist_id,
                 'bed_id' => $request->bed,
@@ -170,7 +187,7 @@ class SlipController extends Controller
             
         }      
 
-        return redirect('/slips/'.$slip->id);
+        return $request->processing == 'cross_match' ? redirect('/slips/cross-match/'.$slip->id) : redirect('/slips/'.$slip->id) ;
     }
 
     /**
@@ -181,13 +198,24 @@ class SlipController extends Controller
      */
     public function show(Slip $slip)
     {
-        return view('slips.view', compact('slip'));
+        if($slip->donor_id == null)
+        {
+            return view('slips.view', compact('slip'));
+        }
+
+        return view('slips.cross-match', compact('slip'));
+
     }
 
 
-    public function view(Slip $slip)
+    // public function view(Slip $slip)
+    // {
+    //     return view('slips.view', compact('slip'));
+    // }
+
+    public function crossMatchSlip(Slip $slip)
     {
-        return view('slips.view', compact('slip'));
+        return view('slips.cross-match', compact('slip'));
     }
 
     /**

@@ -12,6 +12,7 @@ class Slip extends Model
     protected $fillable = [
         'receptionist_id',
         'patient_id',
+        'donor_id',
         'department_id',
         'doctor_id',
         'bed_id',
@@ -34,6 +35,11 @@ class Slip extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class)->withTrashed();
+    }
+
+    public function donor()
+    {
+        return $this->belongsTo(Donor::class)->withTrashed();
     }
 
     public function bed()

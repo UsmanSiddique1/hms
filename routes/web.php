@@ -32,7 +32,7 @@ Route::group(['middleware'=> ['auth']], function(){
 
     Route::get('/', [AdminController::class, 'dashboard']);
     Route::resource('/slips', SlipController::class);
-
+    Route::get('/slips/cross-match/{slip}', [SlipController::class, 'crossMatchSlip']);
     Route::group(['middleware' => ['check.admin']], function(){
         Route::resource('/doctors', DoctorController::class);
         Route::resource('/patients', PatientController::class);
