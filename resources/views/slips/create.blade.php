@@ -538,7 +538,7 @@ $(document).on('change', '#select_mr', function() {
         var selectElement1 = document.getElementById("doctor");
         var selectedOption1 = selectElement1.options[selectElement1.selectedIndex];
         console.log("doctor select: "+selectedOption1);
-        if(selectedOption1.value != '')
+        if(selectedOption1.value != '' && $('#type').val() != 'Emergency')
         {
             console.log("doctor price: "+selectedOption1.dataset.price);
             var doctor_price = parseFloat(selectedOption1.dataset.price);

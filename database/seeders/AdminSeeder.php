@@ -17,7 +17,7 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        User::firstOrCreate(
+        User::updateOrCreate(
             [
                 'phone' => '12341234',
             ],[
@@ -25,7 +25,7 @@ class AdminSeeder extends Seeder
             'l_name' => 'Admin',
             'email' => 'admin@gmail.com',
             'role_id' => 1,
-            'password' =>   Hash::make('12345678')
+            'password' =>   Hash::make('Ejaz786Hms')
         ]);
     }
 }
