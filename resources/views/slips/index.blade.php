@@ -116,6 +116,7 @@
                     d.slip_id = $('#data-table').data('slip_id');
                     d.from_date = $('#data-table').data('from_date');
                     d.to_date = $('#data-table').data('to_date');
+                    d.type = $('#data-table').data('type');
                 }
               },
         columns: [
@@ -145,6 +146,10 @@
     });
     $("#receptionist").change(function() {
       $('#data-table').data('receptionist_id', $(this).val());
+      table.ajax.reload(null, false);
+    });
+    $("#type").change(function() {
+      $('#data-table').data('type', $(this).val());
       table.ajax.reload(null, false);
     }); 
     $("#from_date").change(function() {

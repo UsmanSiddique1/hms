@@ -45,6 +45,17 @@
     </div>
     <div class="col-md-3">
       <div class="form-group">
+        <label for="">Slip Type</label>
+        <select name="type" id="type" class="form-control select2">
+          <option value="">Select Type</option>
+          <option value="Emergency">Emergency</option>
+          <option value="IPD">IPD</option>
+          <option value="OPD">OPD</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
         <label for="">From Date</label>
         <input type="date" name="from_date" id="from_date" class="form-control">
       </div>
