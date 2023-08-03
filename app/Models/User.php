@@ -48,7 +48,9 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-    ];   
+    ];  
+
+    protected $appends = ['full_name'];
 
     public function doctor()
     {

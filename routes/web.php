@@ -31,15 +31,15 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware'=> ['auth']], function(){
 
     Route::get('/', [AdminController::class, 'dashboard']);
-    Route::resource('/slips', SlipController::class);
-    Route::get('/slips/cross-match/{slip}', [SlipController::class, 'crossMatchSlip']);
+    Route::resource('slips', SlipController::class);
+    Route::get('slips/cross-match/{slip}', [SlipController::class, 'crossMatchSlip']);
     Route::group(['middleware' => ['check.admin']], function(){
-        Route::resource('/doctors', DoctorController::class);
-        Route::resource('/patients', PatientController::class);
-        Route::resource('/departments', DepartmentController::class);
-        Route::resource('/beds', BedController::class);
-        Route::resource('/procedures', ProcedureController::class);
-        Route::resource('/receptionists', ReceptionistController::class);
+        Route::resource('doctors', DoctorController::class);
+        Route::resource('patients', PatientController::class);
+        Route::resource('departments', DepartmentController::class);
+        Route::resource('beds', BedController::class);
+        Route::resource('procedures', ProcedureController::class);
+        Route::resource('receptionists', ReceptionistController::class);
     });
     
     // Get MR Numbers by phone

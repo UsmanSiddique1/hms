@@ -31,7 +31,6 @@
 
     <div class="row clearfix">
         <div class="col-md-12">
-
             <div class="card patients-list">
                 <div class="header">
                     <h2>Slips List</h2>
@@ -39,11 +38,8 @@
                     </ul>
                 </div>
                 <div class="body">
-                    <div class="row">
-                        @include('slips.includes.filters')
-                    </div>
                     <div class="table-responsive">
-                        <table id="data-table" class="table table-bordered table-striped table-hover">
+                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                             <thead>
                                 <tr>                                       
                                     <th>Slip No</th>
@@ -60,6 +56,28 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($slips as $key => $slip)
+                                <tr>
+                                    <td>{{ $slip->slip_number }}</td>
+                                    <td>{{ $slip->patient->mr_number }}</td>
+                                    <td>{{ $slip->patient->name }}</td>
+                                    <td>{{ $slip->patient->phone }}</td>
+                                    <td>{{ $slip->doctor ? $slip->doctor->user->f_name : '--' }}</td>
+                                    <td><span class="badge {{ $slip->type == 'Emergency' ? 'badge-danger' : 'badge-primary' }}">{{ $slip->type }}</span></td>
+                                    <td>Rs.{{ $slip->total_amount }}</td>
+                                    <td>{{ $slip->created_at->format('d-M-Y') }}</td>
+                                    <td>{{ $slip->created_at->format('h:i a') }}</td>
+                                    <td>
+                                        <a href="{{ route('slips.show', $slip->id) }}" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                        <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-primary edit-patient"><i class="fa fa-pencil"></i></a>
+                                        
+                                        <a href="javascript:void(0)" class="delete btn btn-danger" 
+                                          data-id="{{ $slip->id }}"
+                                          data-slip_number="{{ $slip->slip_number }}"
+                                            ><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
                                 
                             </tbody>
                         </table>                            
@@ -94,78 +112,15 @@
       </div>
     </div>
 </div>
-@endsection
-
 @push('footer-scripts')
 <script>
-  $(function () {
-    console.log("start");
-    var table = $('#data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-                url: "{{ route('slips.index') }}",
-                method: "GET",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: function(d) {
-                    d.doctor_id = $('#data-table').data('doctor_id');
-                    d.patient_id = $('#data-table').data('patient_id');
-                    d.receptionist_id = $('#data-table').data('receptionist_id');
-                    d.slip_id = $('#data-table').data('slip_id');
-                    d.from_date = $('#data-table').data('from_date');
-                    d.to_date = $('#data-table').data('to_date');
-                }
-              },
-        columns: [
-            {data: 'slip_number', name: 'slip_number'},
-            {data: 'patient.mr_number', name: 'patient.mr_number'},
-            {data: 'patient.name', name: 'patient.name'},
-            {data: 'patient.phone', name: 'patient.phone'},
-            {data: 'doctor', name: 'doctor'},
-            {data: 'type', name: 'type'},
-            {data: 'total_amount', name: 'total_amount'},
-            {data: 'date', name: 'date'},
-            {data: 'time', name: 'time'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    }); 
-    $("#doctor").change(function() {
-      $('#data-table').data('doctor_id', $(this).val());
-      table.ajax.reload(null, false);
+    $('.delete').click(function(){
+        var id = $(this).data('id');
+        $('#slip_number').text($(this).data('slip_number'));
+        $('#deleteForm').attr('action',"{{ url('slips') }}/"+id);
+        $('#deleteModel').modal().show();
     });
-    $("#patient").change(function() {
-      $('#data-table').data('patient_id', $(this).val());
-      table.ajax.reload(null, false);
-    });
-    $("#slip").change(function() {
-      $('#data-table').data('slip_id', $(this).val());
-      table.ajax.reload(null, false);
-    });
-    $("#receptionist").change(function() {
-      $('#data-table').data('receptionist_id', $(this).val());
-      table.ajax.reload(null, false);
-    }); 
-    $("#from_date").change(function() {
-      $('#data-table').data('from_date', $(this).val());
-      table.ajax.reload(null, false);
-    }); 
-    $("#to_date").change(function() {
-      $('#data-table').data('to_date', $(this).val());
-      table.ajax.reload(null, false);
-    }); 
-    $('#clear-filter').click(function(){
-        $('#doctor').val('').trigger('change');
-        $('#patient').val('').trigger('change');
-        $('#slip').val('').trigger('change');
-        $('#receptionist').val('').trigger('change');
-        $('#from_date').val('');
-        $('#to_date').val('');
-        table.ajax.reload(null, false);
-    });     
-  });
-  
-  $(".select2").select2();
 </script>
+
 @endpush
+@endsection

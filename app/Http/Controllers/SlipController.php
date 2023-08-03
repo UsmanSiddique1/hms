@@ -13,25 +13,71 @@ use App\Models\Slip;
 use App\Models\SlipProcedure;
 use App\Models\Receptionist;
 use App\Services\DonorService;
+use App\Services\SlipService;
+use App\Services\DoctorService;
+use App\Services\ReceptionistService;
+use App\Services\PatientService;
 use Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
+use DataTables;
 
 class SlipController extends Controller
 {
-    
-    protected $donorService;
+    const BASE_PATH = 'slips.';
 
-    public function __construct(DonorService $donorService)
+    protected $donorService;
+    protected $slipService;
+    protected $patientService;
+    protected $receptionistService;
+    protected $doctorService;
+
+    public function __construct(
+        DonorService $donorService, 
+        SlipService $slipService,
+        ReceptionistService $receptionistService,
+        DoctorService $doctorService,
+        PatientService $patientService
+        )
     {
-        return $this->donorService = $donorService;
+        $this->donorService = $donorService;
+        $this->slipService = $slipService;
+        $this->patientService = $patientService;
+        $this->receptionistService = $receptionistService;
+        $this->doctorService = $doctorService;
     }
-    
-    public function index()
+
+    public function index(Request $request)
     {
-        $slips = Slip::orderBy('slip_number')->get();
-        return view('slips.index', compact('slips'));
+        if($request->ajax())
+        {
+            $slips = $this->slipService->getAll()->orderBy('id');
+            $this->slipService->filters($request, $slips);
+            return Datatables::of($slips)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $btn = '<a href="' . route('slips.show', ['slip' => $row->id]) . '" class="edit btn btn-primary btn-sm">View</a>';
+                        return $btn;
+                 })
+                 ->addColumn('date', function($row){
+                    return $row->created_at->format('d-M-Y');
+                 })
+                 ->addColumn('time', function($row){
+                    return $row->created_at->format('H:i A');
+                 })
+                 ->addColumn('doctor', function($row){
+                    return $row->doctor ? $row->doctor->user->full_name : '--';
+                 })
+                 ->rawColumns(['action','date','time', 'doctor'])
+                 ->make(true);
+        }
+
+        $slips = $this->slipService->getAll()->get();
+        $patients = $this->patientService->getAll();
+        $doctors = $this->doctorService->getAll()->get();
+        $receptionists = $this->receptionistService->getAll();
+
+        return view(self::BASE_PATH.'index', compact('slips','patients','doctors','doctors','receptionists'));
     }
 
     /**
