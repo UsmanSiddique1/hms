@@ -3,7 +3,7 @@
         <div class="navbar-brand">
             <button type="button" class="btn-toggle-offcanvas"><i class="fa fa-bars"></i></button>
             <button type="button" class="btn-toggle-fullwidth"><i class="fa fa-bars"></i></button>
-            <a href="#">EJAZ SIKANDAR MEMORIAL HOPITAL</a>                
+            <a href="#">EJAZ SIKANDAR MEMORIAL HOSPITAL</a>                
         </div>
         
         {{-- <div class="navbar-right">
