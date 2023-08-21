@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @push('header-scripts')
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
 @endpush
 @section('content')
@@ -98,78 +98,109 @@
 
 @push('footer-scripts')
 <script>
-  $(function () {
-    console.log("start");
-    var table = $('#data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-                url: "{{ route('slips.index') }}",
-                method: "GET",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: function(d) {
-                    d.doctor_id = $('#data-table').data('doctor_id');
-                    d.patient_id = $('#data-table').data('patient_id');
-                    d.receptionist_id = $('#data-table').data('receptionist_id');
-                    d.slip_id = $('#data-table').data('slip_id');
-                    d.from_date = $('#data-table').data('from_date');
-                    d.to_date = $('#data-table').data('to_date');
-                    d.type = $('#data-table').data('type');
-                }
+  
+  var table = $('#data-table').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+              url: "{{ route('slips.index') }}",
+              method: "GET",
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
-        columns: [
-            {data: 'slip_number', name: 'slip_number'},
-            {data: 'patient.mr_number', name: 'patient.mr_number'},
-            {data: 'patient.name', name: 'patient.name'},
-            {data: 'patient.phone', name: 'patient.phone'},
-            {data: 'doctor', name: 'doctor'},
-            {data: 'type', name: 'type'},
-            {data: 'total_amount', name: 'total_amount'},
-            {data: 'date', name: 'date'},
-            {data: 'time', name: 'time'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    }); 
-    $("#doctor").change(function() {
-      $('#data-table').data('doctor_id', $(this).val());
-      table.ajax.reload(null, false);
-    });
-    $("#patient").change(function() {
-      $('#data-table').data('patient_id', $(this).val());
-      table.ajax.reload(null, false);
-    });
-    $("#slip").change(function() {
-      $('#data-table').data('slip_id', $(this).val());
-      table.ajax.reload(null, false);
-    });
-    $("#receptionist").change(function() {
-      $('#data-table').data('receptionist_id', $(this).val());
-      table.ajax.reload(null, false);
-    });
-    $("#type").change(function() {
-      $('#data-table').data('type', $(this).val());
-      table.ajax.reload(null, false);
-    }); 
-    $("#from_date").change(function() {
-      $('#data-table').data('from_date', $(this).val());
-      table.ajax.reload(null, false);
-    }); 
-    $("#to_date").change(function() {
-      $('#data-table').data('to_date', $(this).val());
-      table.ajax.reload(null, false);
-    }); 
-    $('#clear-filter').click(function(){
-        $('#doctor').val('').trigger('change');
-        $('#patient').val('').trigger('change');
-        $('#slip').val('').trigger('change');
-        $('#receptionist').val('').trigger('change');
-        $('#from_date').val('');
-        $('#to_date').val('');
-        table.ajax.reload(null, false);
-    });     
+              data: function(d) {
+                  d.doctor_id = $('#data-table').data('doctor_id');
+                  d.patient_id = $('#data-table').data('patient_id');
+                  d.receptionist_id = $('#data-table').data('receptionist_id');
+                  d.slip_id = $('#data-table').data('slip_id');
+                  d.from_date = $('#data-table').data('from_date');
+                  d.to_date = $('#data-table').data('to_date');
+                  d.type = $('#data-table').data('type');
+              }
+            },
+      columns: [
+          {data: 'slip_number', name: 'slip_number'},
+          {data: 'patient.mr_number', name: 'patient.mr_number'},
+          {data: 'patient.name', name: 'patient.name'},
+          {data: 'patient.phone', name: 'patient.phone'},
+          {data: 'doctor', name: 'doctor'},
+          {data: 'type', name: 'type'},
+          {data: 'total_amount', name: 'total_amount'},
+          {data: 'date', name: 'date'},
+          {data: 'time', name: 'time'},
+          {data: 'action', name: 'action', orderable: false, searchable: false},
+      ]
+  }); 
+  $("#doctor").change(function() {
+    $('#data-table').data('doctor_id', $(this).val());
+    table.ajax.reload(null, false);
   });
+  $("#patient").change(function() {
+    $('#data-table').data('patient_id', $(this).val());
+    table.ajax.reload(null, false);
+  });
+  $("#slip").change(function() {
+    $('#data-table').data('slip_id', $(this).val());
+    table.ajax.reload(null, false);
+  });
+  $("#receptionist").change(function() {
+    $('#data-table').data('receptionist_id', $(this).val());
+    table.ajax.reload(null, false);
+  });
+  $("#type").change(function() {
+    $('#data-table').data('type', $(this).val());
+    table.ajax.reload(null, false);
+  }); 
+  $("#from_date").change(function() {
+    $('#data-table').data('from_date', $(this).val());
+    table.ajax.reload(null, false);
+  }); 
+  $("#to_date").change(function() {
+    $('#data-table').data('to_date', $(this).val());
+    table.ajax.reload(null, false);
+  }); 
+  $('#clear-filter').click(function(){
+      $('#doctor').val('').trigger('change');
+      $('#patient').val('').trigger('change');
+      $('#slip').val('').trigger('change');
+      $('#receptionist').val('').trigger('change');
+      $('#from_date').val('');
+      $('#to_date').val('');
+      table.ajax.reload(null, false);
+  });     
+
+  // Sweet Alert on delete
+  function deleteItem(itemId) {
+    console.log("delete: "+itemId);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this item!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+          console.log(itemId);
+            $.ajax({
+                url: 'slips/' + itemId,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function (data) {
+                    table.ajax.reload(null, false);
+                    Swal.fire('Success', 'Slip has been deleted successfully!', 'success')
+                },
+                error: function (xhr) {
+                    Swal.fire('Error', 'Error in deleting slip !', 'success')
+                    
+                }
+            });
+        }
+    });
+  }
   
   $(".select2").select2();
 </script>

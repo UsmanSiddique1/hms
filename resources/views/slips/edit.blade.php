@@ -36,7 +36,9 @@
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
                 <div class="header">
-                    <h2><strong>Slip# {{ $slip->slip_number }}</strong>  <small>{{ now()->format('d-M-Y h:i A') }}</small> </h2>                            
+                    <h2><strong>Slip# {{ $slip->slip_number }}</strong>  <small>{{ now()->format('d-M-Y h:i A') }}</small> @if($slip->donor_id != null)
+                        <strong class="badge badge-secondary">CROSS MATCH SLIP</strong>
+                        @endif </h2>                            
                 </div>
                 <form action="{{ route('slips.update', $slip->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -47,7 +49,11 @@
                             {{ Session::get('error') }}
                           </div>
                           @endif
+                          @if($slip->donor_id != null)
+                            <input type="hidden" name="processing" value="cross_match">
+                            @endif
                         <div class="row clearfix">
+                            
                             <div class="col-sm-4 {{ Auth::user()->role_name == 'Admin' ? '' : 'd-none'}}" id="employee_div" >
                                 <div class="form-group">
                                     <label for="">Select Receptionist</label>
@@ -216,6 +222,46 @@
                                 </div>
                             </div>                    
                         </div>
+                        @if($slip->donor_id != null )
+                        <div class="row" id="doner_row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Donor Name *</label>
+                                    <input type="text" class="form-control" id="donor_name" name="donor_name" placeholder="Patient Name" value="{{ $slip->donor->name }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-3" id="donor_cnic_div">
+                                <div class="form-group">
+                                    <label for="">Donor cnic</label>
+                                    <input type="number" name="donor_cnic" class="form-control" value="{{ $slip->donor->cnic }}" id="donor_cnic">
+                                </div>
+                            </div>                     
+                            <div class="col-sm-3" id="donor_address_div">
+                                <div class="form-group">
+                                    <label for="">Donor address</label>
+                                    <input type="text" name="donor_address" class="form-control" value="{{ $slip->donor->address }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Donor Age(Years)</label>
+                                    <input type="number" class="form-control" id="donor_age" name="donor_age" value="{{ $slip->donor->age }}" placeholder="Donor Age">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" id="donor_phone">    
+                                    <label for="">Donor Phone *</label>
+                                    <input type="number" name="donor_phone" class="form-control" value="{{ $slip->donor->phone }}" placeholder="Doner Phone">                                
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Relation *</label>
+                                    <input type="text" class="form-control" name="donor_S_O" value="{{ $slip->donor->S_O }}" placeholder="Doner S/O">
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                         <div class="row clearfix">                            
                             
                             <div class="col-sm-12">
@@ -225,7 +271,19 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
+                                    <label for="">Sub Total</label>
                                     <input class="form-control" name="total_amount" id="total_amount" placeholder="Total" readonly value="{{ $slip->total_amount }}" required min="1">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Discount</label>
+                                    <input class="form-control" onkeyup="calculateTotal()" name="discount" id="discount" value="{{ $slip->discount }}" placeholder="Discount" min="1" max="{{ $slip->total_amount }}">
+                                </div>
+                            </div><div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Grand Total</label>
+                                    <input class="form-control" name="grand_total" id="grand_total" value="{{ $slip->grand_total ?: $slip->total_amount }}" placeholder="Grand" readonly required min="1">
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -307,8 +365,26 @@ if(selectedOptions.length > 0)
     console.log(total);
 }
 @endif
-$('#total_amount').val(total);
-document.getElementById("total_amount").textContent = total.toFixed(2);
+// Get the discount value from the input field
+var discount = parseFloat(document.getElementById("discount").value) || 0;
+
+if(total < discount)
+{
+    $('#discount').val(0);
+    $('#grand_total').val($('#total_amount').val());
+
+}
+else
+{
+    var grand_total = total - discount;   
+}
+
+
+// Update the total_amount and grand_total input fields
+$('#total_amount').val(total.toFixed(2));
+$('#grand_total').val(grand_total.toFixed(2));
+// $('#total_amount').val(total);
+// document.getElementById("total_amount").textContent = total.toFixed(2);
 }
 </script>
 

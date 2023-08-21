@@ -8,6 +8,7 @@
 <meta name="description" content="Iconic Bootstrap 4.5.0 Admin Template">
 <meta name="author" content="WrapTheme, design by: ThemeMakker.com">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- VENDOR CSS -->
 <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
@@ -70,6 +71,7 @@
 <script src="{{  asset('assets/vendor/jquery-datatable/buttons/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
 
 <script>
     $(document).ready(function() {

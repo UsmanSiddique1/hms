@@ -56,7 +56,9 @@ class SlipController extends Controller
             return Datatables::of($slips)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<a href="' . route('slips.show', ['slip' => $row->id]) . '" class="edit btn btn-primary btn-sm">View</a>';
+                        $btn = '<a href="' . route('slips.show', ['slip' => $row->id]) . '" class="edit btn btn-primary btn-sm"><i class="fa fa-eye"></i></a> '. 
+                                '<a href="' . route('slips.edit', ['slip' => $row->id]) . '" class="editModal btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a> '.
+                                '<a href="javascript:void(0)" class="delete btn btn-danger btn-sm" onclick="deleteItem('.$row->id.')"><i class="fa fa-trash"></i></a>';
                         return $btn;
                  })
                  ->addColumn('date', function($row){
@@ -290,6 +292,17 @@ class SlipController extends Controller
             
             DB::beginTransaction();
 
+            if($request->processing == 'cross_match')
+            {
+                Log::info("Start Creating Cross Match Slip");
+                Log::info("Validating Cross Match Request");
+                $request->validate([
+                    'donor_cnic' => 'required',
+                    'donor_name' => 'required'
+                ]);        
+                $donor = $this->donorService->updateOrCreate($request);
+            }
+            
             $slip->patient->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -348,7 +361,7 @@ class SlipController extends Controller
     public function destroy(Slip $slip)
     {
         $slip->delete();
-        return back()->with('success', 'Slip has been deleted');
+        return response()->json(['status' => true]);
     }
 
     public function getMrNumbers($phone)

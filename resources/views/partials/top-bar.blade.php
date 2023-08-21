@@ -5,7 +5,6 @@
             <button type="button" class="btn-toggle-fullwidth"><i class="fa fa-bars"></i></button>
             <a href="#">EJAZ SIKANDAR MEMORIAL HOSPITAL</a>                
         </div>
-        
         {{-- <div class="navbar-right">
             <form id="navbar-search" class="navbar-form search-form">
                 <input value="" class="form-control" placeholder="Search here..." type="text">
