@@ -119,7 +119,7 @@
             <tr>
                 <td colspan="2">Physician: Dr. {{ $slip->doctor ? $slip->doctor->user->full_name : '-' }}</td>
                 
-                <td colspan="2">Fee Paid: Rs.{{ $slip->grand_total }} {{ $slip->discount > 0 ? 'Discount: Rs'. $slip->discount : '' }}</td>
+                <td colspan="2">Fee Paid: Rs.{{ $slip->grand_total ?: $slip->total_amount }} {{ $slip->discount > 0 ? 'Discount: Rs'. $slip->discount : '' }}</td>
                 
                 <td>Advice By Dr: </td>
             </tr>
