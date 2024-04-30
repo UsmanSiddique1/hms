@@ -35,13 +35,17 @@ Route::group(['middleware'=> ['auth']], function(){
     Route::get('slips/cross-match/{slip}', [SlipController::class, 'crossMatchSlip']);
     Route::group(['middleware' => ['check.admin']], function(){
         Route::resource('doctors', DoctorController::class);
+        Route::group(['prefix' => 'patients'], function(){
+            Route::get('ajax-filter',[PatientController::class, 'ajaxFilter'])->name('patients.ajaxFilter');
+            Route::get('datatable',[PatientController::class, 'datatable'])->name('patients.datatable');
+        });
         Route::resource('patients', PatientController::class);
         Route::resource('departments', DepartmentController::class);
         Route::resource('beds', BedController::class);
         Route::resource('procedures', ProcedureController::class);
         Route::resource('receptionists', ReceptionistController::class);
     });
-    
+
     // Get MR Numbers by phone
     Route::get('/get_mr_numers/{phone}', [SlipController::class, 'getMrNumbers']);
 });
