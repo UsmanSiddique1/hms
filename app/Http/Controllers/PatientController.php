@@ -31,7 +31,7 @@ class PatientController extends Controller
         return Datatables::of($patients)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return '<a href="javascript:void(0)" data-id="' . $row->id . '" data-mr_number="' . $row->mr_number . '" data-name="' . $row->name . '" data-age_years="' . $row->age_years . '" data-age_months="' . $row->age_months . '" data-age_weeks="' . $row->age_weeks . '" data-gender="' . $row->gender . '" data-phone="' . $row->phone . '" class="edit-patient btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a> ' .
+                return '<a href="javascript:void(0)" onclick="editItem(' . $row->id . ')" class="edit-patient btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a> ' .
                     '<a href="javascript:void(0)" class="delete btn btn-danger btn-sm" onclick="deleteItem(' . $row->id . ')"><i class="fa fa-trash"></i></a>';
             })
             ->addColumn('age', function ($row) {

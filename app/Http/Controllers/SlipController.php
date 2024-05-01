@@ -33,7 +33,7 @@ class SlipController extends Controller
     protected $doctorService;
 
     public function __construct(
-        DonorService $donorService, 
+        DonorService $donorService,
         SlipService $slipService,
         ReceptionistService $receptionistService,
         DoctorService $doctorService,
@@ -56,7 +56,7 @@ class SlipController extends Controller
             return Datatables::of($slips)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<a href="' . route('slips.show', ['slip' => $row->id]) . '" class="edit btn btn-primary btn-sm"><i class="fa fa-eye"></i></a> '. 
+                        $btn = '<a href="' . route('slips.show', ['slip' => $row->id]) . '" class="edit btn btn-primary btn-sm"><i class="fa fa-eye"></i></a> '.
                                 '<a href="' . route('slips.edit', ['slip' => $row->id]) . '" class="editModal btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a> '.
                                 '<a href="javascript:void(0)" class="delete btn btn-danger btn-sm" onclick="deleteItem('.$row->id.')"><i class="fa fa-trash"></i></a>';
                         return $btn;
@@ -90,10 +90,10 @@ class SlipController extends Controller
     public function create()
     {
         $ref_mr_count = ReferenceCount::where('type', 'mr')->first();
-        $new_mr = 'MR#'.$ref_mr_count->count + 1;        
+        $new_mr = 'MR#'.$ref_mr_count->count + 1;
 
         $ref_slip_count = ReferenceCount::where('type', 'slip')->first();
-        $new_slip = $ref_slip_count->count + 1; 
+        $new_slip = $ref_slip_count->count + 1;
 
         $patients = Patient::all();
         $doctors = Doctor::all();
@@ -111,7 +111,7 @@ class SlipController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {                
+    {
         try {
 
             Log::info("Start Creating Slip Request");
@@ -126,7 +126,7 @@ class SlipController extends Controller
                 $request->validate([
                     'donor_cnic' => 'required',
                     'donor_name' => 'required'
-                ]);        
+                ]);
                 $donor = $this->donorService->updateOrCreate($request);
             }
 
@@ -138,25 +138,25 @@ class SlipController extends Controller
 
             Log::info("Request Validated: ");
             Log::info($request->all());
-            
+
             $imageUrl = 'dummy-image.jpg';
 
             if (!empty($request->image)) {
                 $file =$request->file('image');
-                $extension = $file->getClientOriginalExtension(); 
+                $extension = $file->getClientOriginalExtension();
                 $filename = time().'.' . $extension;
                 $file->move(public_path('uploads/patients'), $filename);
                 $imageUrl = 'public/uploads/patients'.$filename;
-            }           
-            
+            }
+
             Log::info("MR Number: ".$request->mr_number);
-            $patient = Patient::where('mr_number', $request->mr_number)->first();
+            $patient = Patient::where('id', $request->mr_number)->orWhere('id', $request->phone)->first();
             Log::info("Existing Patient: ".$patient);
-            
+
             if(!$patient)
             {
                 $patient = Patient::create([
-                    'mr_number' => $request->mr_number,            
+                    'mr_number' => $request->mr_number,
                     'name' => $request->name,
                     'phone' => $request->phone,
                     'cnic' => $request->cnic,
@@ -175,15 +175,15 @@ class SlipController extends Controller
                 $ref_count->count = $ref_count->count + 1;
                 $ref_count->update();
                 Log::info("New Patient: ".$patient);
-            }     
+            }
 
             $slip_number_count = ReferenceCount::where('type', 'slip')->first();
             $slip_number_count->count = $slip_number_count->count + 1;
             $slip_number_count->update();
-            Log::info("Slip Number Count: ".$slip_number_count->count);           
-            
+            Log::info("Slip Number Count: ".$slip_number_count->count);
+
             $slip_number = 'Slip#'. $slip_number_count->count;
-            Log::info("Slip Number: ".$slip_number);           
+            Log::info("Slip Number: ".$slip_number);
 
             $receptionist_id = $request->receptionist_id != '' ? $request->receptionist_id : Auth::user()->receptionist->id;
             $slip = Slip::create([
@@ -200,31 +200,31 @@ class SlipController extends Controller
                 'grand_total' => $request->grand_total,
                 'discount' => $request->discount ?? 0,
                 'doctor_type' => $request->doctor_type,
-                'remaining_amount' => 0    
+                'remaining_amount' => 0
             ]);
 
             Log::info("Slip Generated: ".$slip);
-            
+
             if(isset($request->procedures) && count($request->procedures) > 0)
             {
-                Log::info("Procedures IDs ");           
-                Log::info($request->procedures);           
+                Log::info("Procedures IDs ");
+                Log::info($request->procedures);
 
                 $procedureIds = $request->procedures;
                 $procedures = Procedure::whereIn('id', $procedureIds)->get();
-    
+
                 $syncData = [];
-    
+
                 foreach ($procedures as $procedure) {
                     $syncData[$procedure->id] = ['price' => $procedure->price];
                 }
 
-                Log::info("Syncing Procedures ID's");                
+                Log::info("Syncing Procedures ID's");
                 $slip->procedures()->sync($syncData);
-            }           
+            }
 
             DB::commit();
-            Log::info("Function Closed");                
+            Log::info("Function Closed");
 
 
         } catch (\Throwable $e) {
@@ -232,8 +232,8 @@ class SlipController extends Controller
             DB::rollBack();
             Log::info("Error in slip store: ".$e->getLine() . " ".$e->getMessage(). "Full Error Log: ".$e);
             return back()->with('error', $e);
-            
-        }      
+
+        }
 
         return $request->processing == 'cross_match' ? redirect('/slips/cross-match/'.$slip->id) : redirect('/slips/'.$slip->id) ;
     }
@@ -288,8 +288,8 @@ class SlipController extends Controller
      */
     public function update(Request $request, Slip $slip)
     {
-        try {      
-            
+        try {
+
             DB::beginTransaction();
 
             if($request->processing == 'cross_match')
@@ -299,10 +299,10 @@ class SlipController extends Controller
                 $request->validate([
                     'donor_cnic' => 'required',
                     'donor_name' => 'required'
-                ]);        
+                ]);
                 $donor = $this->donorService->updateOrCreate($request);
             }
-            
+
             $slip->patient->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -325,7 +325,7 @@ class SlipController extends Controller
                 'grand_total' => $request->grand_total,
                 'discount' => $request->discount,
                 'doctor_type' => $request->doctor_type,
-                'remaining_amount' => 0    
+                'remaining_amount' => 0
             ]);
 
 
@@ -339,7 +339,7 @@ class SlipController extends Controller
             }
 
             $slip->procedures()->sync($syncData);
-             
+
             DB::commit();
 
             return redirect('/slips/'.$slip->id);
@@ -348,7 +348,7 @@ class SlipController extends Controller
 
             DB::rollBack();
             return back()->with('error', $e->getFile(). "Line:" . $e->getLine().  $e->getMessage());
-            
+
         }
     }
 
