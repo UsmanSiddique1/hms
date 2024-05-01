@@ -529,6 +529,7 @@
             var phone = response.phone;
             var name = response.name;
             var cnic = response.cnic;
+            var mr_number = response.mr_number;
 
             console.log(phone, name);
             $('#patient_name').val(name);

@@ -34,7 +34,6 @@ Route::group(['middleware'=> ['auth']], function(){
     Route::resource('slips', SlipController::class);
     Route::get('slips/cross-match/{slip}', [SlipController::class, 'crossMatchSlip']);
     Route::get('/patients/ajax-filter',[PatientController::class, 'ajaxFilter'])->name('patients.ajaxFilter');
-    Route::resource('patients', PatientController::class);
     Route::group(['middleware' => ['check.admin']], function(){
         Route::resource('doctors', DoctorController::class);
         Route::group(['prefix' => 'patients'], function(){
@@ -45,6 +44,8 @@ Route::group(['middleware'=> ['auth']], function(){
         Route::resource('procedures', ProcedureController::class);
         Route::resource('receptionists', ReceptionistController::class);
     });
+
+    Route::resource('patients', PatientController::class);
 
     // Get MR Numbers by phone
     Route::get('/get_mr_numers/{phone}', [SlipController::class, 'getMrNumbers']);
