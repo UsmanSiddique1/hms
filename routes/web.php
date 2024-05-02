@@ -39,12 +39,13 @@ Route::group(['middleware'=> ['auth']], function(){
         Route::group(['prefix' => 'patients'], function(){
             Route::get('datatable',[PatientController::class, 'datatable'])->name('patients.datatable');
         });
-        Route::resource('patients', PatientController::class);
         Route::resource('departments', DepartmentController::class);
         Route::resource('beds', BedController::class);
         Route::resource('procedures', ProcedureController::class);
         Route::resource('receptionists', ReceptionistController::class);
     });
+
+    Route::resource('patients', PatientController::class);
 
     // Get MR Numbers by phone
     Route::get('/get_mr_numers/{phone}', [SlipController::class, 'getMrNumbers']);

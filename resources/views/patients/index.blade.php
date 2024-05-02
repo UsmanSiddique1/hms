@@ -86,15 +86,15 @@
                     </div>
                     <div class="form-group">
                         <label for="">Age Years</label>
-                        <input type="text" class="form-control" name="age_years" id="age_years" placeholder="Name">
+                        <input type="text" class="form-control" name="age_years" id="age_years" placeholder="Age Years">
                     </div>
                     <div class="form-group">
                         <label for="">Age Months</label>
-                        <input type="text" class="form-control" name="age_months" id="age_months" placeholder="Name">
+                        <input type="text" class="form-control" name="age_months" id="age_months" placeholder="Age Months">
                     </div>
                     <div class="form-group">
                         <label for="">Age Weeks</label>
-                        <input type="text" class="form-control" name="age_weeks" id="age_weeks" placeholder="Name">
+                        <input type="text" class="form-control" name="age_weeks" id="age_weeks" placeholder="Age Weeks">
                     </div>
                     <div class="form-group">
                         <label for="">Gender</label>
@@ -145,19 +145,13 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: "{{ route('patients.datatable') }}",
+            url: "{{ url('/patients/datatable') }}",
             method: "GET",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: function(d) {
-                d.doctor_id = $('#data-table').data('doctor_id');
-                d.patient_id = $('#data-table').data('patient_id');
-                d.receptionist_id = $('#data-table').data('receptionist_id');
-                d.slip_id = $('#data-table').data('slip_id');
-                d.from_date = $('#data-table').data('from_date');
-                d.to_date = $('#data-table').data('to_date');
-                d.type = $('#data-table').data('type');
+
             }
         },
         columns: [{
@@ -227,7 +221,7 @@
     });
 
     $('.edit-patient').click(function() {
-        console.log("delete "+$(this).data("mr_number"));
+        console.log("delete " + $(this).data("mr_number"));
         $('.modal-title').text($(this).data("mr_number"));
         $('#name').val($(this).data("name"));
         $('#phone').val($(this).data("phone"));
@@ -239,6 +233,20 @@
         $('#updateForm').attr('action', "{{ url('patients') }}/" + patient_id);
         $('#updateModel').modal().show();
     });
+
+    function editItem(itemId) {
+        $.get('/patients/' + itemId, function(response) {
+            $('.modal-title').text(response.mr_number);
+            $('#name').val(response.name);
+            $('#phone').val(response.phone);
+            $('#gender').val(response.gender);
+            $('#age_years').val(response.age_years);
+            $('#age_months').val(response.age_months);
+            $('#age_weeks').val(response.age_weeks);
+            $('#updateForm').attr('action', "{{ url('patients') }}/" + itemId);
+            $('#updateModel').modal().show();
+        });
+    }
 
     // Sweet Alert on delete
     function deleteItem(itemId) {
@@ -274,8 +282,6 @@
     }
 
     $(".select2").select2();
-
-
 </script>
 @endpush
 @endsection
