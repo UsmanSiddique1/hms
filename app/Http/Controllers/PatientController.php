@@ -141,7 +141,7 @@ class PatientController extends Controller
         foreach ($patients as $patient) {
             $formattedResults[] = [
                 'id' => $patient->id,
-                'text' => $field == 'phone' ? $patient->phone : $patient->mr_number,
+                'text' => $field == 'phone' ? $patient->phone." ". $patient->name : $patient->mr_number,
             ];
         }
 
